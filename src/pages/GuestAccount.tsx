@@ -9,7 +9,6 @@ import {
   Clock, 
   MapPin, 
   Users, 
-  Utensils,
   Loader2,
   ArrowRight,
   CalendarCheck,
@@ -342,10 +341,10 @@ function BookingCard({ booking, isPast }: { booking: any; isPast?: boolean }) {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Utensils className="h-4 w-4 text-muted-foreground" />
+              <Users className="h-4 w-4 text-muted-foreground" />
               <div>
-                <p className="text-muted-foreground">Meal Plan</p>
-                <p className="font-medium">{MEAL_PLAN_LABELS[booking.meal_plan] || booking.meal_plan}</p>
+                <p className="text-muted-foreground">Rooms</p>
+                <p className="font-medium">{booking.num_rooms} room(s)</p>
               </div>
             </div>
           </div>
@@ -355,7 +354,7 @@ function BookingCard({ booking, isPast }: { booking: any; isPast?: boolean }) {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <p className="text-sm text-muted-foreground">Total Amount</p>
-              <p className="text-lg font-semibold">₹{booking.grand_total.toLocaleString("en-IN")}</p>
+              <p className="text-lg font-semibold">₹{Number(booking.grand_total || 0).toLocaleString("en-IN")}</p>
             </div>
             {!isPast && booking.special_requests && (
               <Badge variant="secondary" className="w-fit">

@@ -80,7 +80,7 @@ export function useDashboardStats() {
           .from("bookings")
           .select("*", { count: "exact", head: true })
           .eq("status", "cancelled")
-          .gte("cancelled_at", thirtyDaysAgo),
+          .gte("updated_at", thirtyDaysAgo),
         // Total revenue (all confirmed/completed)
         supabase
           .from("bookings")
