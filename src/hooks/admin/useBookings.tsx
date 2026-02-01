@@ -16,31 +16,29 @@ export interface BookingWithRelations {
   booking_reference: string;
   guest_name: string;
   guest_email: string;
-  guest_phone: string;
-  guest_city: string | null;
+  guest_phone: string | null;
+  guest_country: string | null;
   check_in_date: string;
   check_out_date: string;
-  num_nights: number;
   num_adults: number;
   num_children: number;
-  meal_plan: string;
-  room_total: number;
-  extra_guest_total: number;
-  meal_plan_total: number;
-  package_total: number;
-  taxes: number;
-  discount_amount: number;
-  grand_total: number;
+  num_rooms: number;
+  base_price: number | null;
+  taxes: number | null;
+  extras: number | null;
+  discount: number | null;
+  grand_total: number | null;
   status: BookingStatus;
   is_enquiry_only: boolean;
   special_requests: string | null;
   internal_notes: string | null;
-  assigned_room_number: string | null;
+  assigned_room_numbers: string[] | null;
+  source: string | null;
+  payment_status: string | null;
+  payment_method: string | null;
+  payment_reference: string | null;
   created_at: string;
   updated_at: string;
-  confirmed_at: string | null;
-  cancelled_at: string | null;
-  completed_at: string | null;
   room_categories: {
     id: string;
     name: string;
@@ -138,20 +136,9 @@ export function useBookings(filters: BookingFilters, page: number = 1, perPage: 
   // Update booking status
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: BookingStatus }) => {
-      const updates: Record<string, any> = { status };
-
-      // Set timestamp based on status
-      if (status === "booking_confirmed") {
-        updates.confirmed_at = new Date().toISOString();
-      } else if (status === "cancelled") {
-        updates.cancelled_at = new Date().toISOString();
-      } else if (status === "checked_out") {
-        updates.completed_at = new Date().toISOString();
-      }
-
       const { data, error } = await supabase
         .from("bookings")
-        .update(updates)
+        .update({ status })
         .eq("id", id)
         .select()
         .single();
@@ -262,7 +249,7 @@ export function useRoomCategories() {
       const { data, error } = await supabase
         .from("room_categories")
         .select("id, name, slug")
-        .order("sort_order", { ascending: true });
+        .order("display_order", { ascending: true });
 
       if (error) throw error;
       return data;

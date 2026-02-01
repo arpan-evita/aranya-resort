@@ -234,8 +234,8 @@ export default function BookingDetails() {
               <div className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                 <div>
-                  <p className="text-xs text-muted-foreground">City</p>
-                  <p className="font-medium">{booking.guest_city || "Not provided"}</p>
+                  <p className="text-xs text-muted-foreground">Country</p>
+                  <p className="font-medium">{booking.guest_country || "Not provided"}</p>
                 </div>
               </div>
             </CardContent>
@@ -272,7 +272,7 @@ export default function BookingDetails() {
                 <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
                 <div>
                   <p className="text-xs text-muted-foreground">Duration</p>
-                  <p className="font-medium">{booking.num_nights} night(s)</p>
+                  <p className="font-medium">{differenceInDays(new Date(booking.check_out_date), new Date(booking.check_in_date))} night(s)</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -299,10 +299,10 @@ export default function BookingDetails() {
                 </div>
               </div>
               <div className="flex items-start gap-3 sm:col-span-2">
-                <UtensilsCrossed className="h-4 w-4 text-muted-foreground mt-0.5" />
+                <BedDouble className="h-4 w-4 text-muted-foreground mt-0.5" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Meal Plan</p>
-                  <p className="font-medium">{mealPlanLabels[booking.meal_plan] || booking.meal_plan}</p>
+                  <p className="text-xs text-muted-foreground">Number of Rooms</p>
+                  <p className="font-medium">{booking.num_rooms} room(s)</p>
                 </div>
               </div>
             </CardContent>
@@ -364,42 +364,30 @@ export default function BookingDetails() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Room Total</span>
-                <span>₹{Number(booking.room_total).toLocaleString("en-IN")}</span>
+                <span className="text-muted-foreground">Base Price</span>
+                <span>₹{Number(booking.base_price || 0).toLocaleString("en-IN")}</span>
               </div>
-              {Number(booking.extra_guest_total) > 0 && (
+              {Number(booking.extras) > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Extra Guest Charges</span>
-                  <span>₹{Number(booking.extra_guest_total).toLocaleString("en-IN")}</span>
+                  <span className="text-muted-foreground">Extras</span>
+                  <span>₹{Number(booking.extras).toLocaleString("en-IN")}</span>
                 </div>
               )}
-              {Number(booking.meal_plan_total) > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Meal Plan</span>
-                  <span>₹{Number(booking.meal_plan_total).toLocaleString("en-IN")}</span>
-                </div>
-              )}
-              {Number(booking.package_total) > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Package</span>
-                  <span>₹{Number(booking.package_total).toLocaleString("en-IN")}</span>
-                </div>
-              )}
-              {Number(booking.discount_amount) > 0 && (
+              {Number(booking.discount) > 0 && (
                 <div className="flex justify-between text-sm text-green-600">
                   <span>Discount</span>
-                  <span>-₹{Number(booking.discount_amount).toLocaleString("en-IN")}</span>
+                  <span>-₹{Number(booking.discount).toLocaleString("en-IN")}</span>
                 </div>
               )}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Taxes</span>
-                <span>₹{Number(booking.taxes).toLocaleString("en-IN")}</span>
+                <span>₹{Number(booking.taxes || 0).toLocaleString("en-IN")}</span>
               </div>
               <Separator />
               <div className="flex justify-between font-bold text-lg">
                 <span>Grand Total</span>
                 <span className="text-[hsl(var(--gold))]">
-                  ₹{Number(booking.grand_total).toLocaleString("en-IN")}
+                  ₹{Number(booking.grand_total || 0).toLocaleString("en-IN")}
                 </span>
               </div>
             </CardContent>
@@ -426,7 +414,7 @@ export default function BookingDetails() {
                 </div>
               </div>
 
-              {booking.confirmed_at && (
+              {booking.status === "booking_confirmed" && (
                 <div className="flex items-start gap-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100">
                     <CheckCircle className="h-4 w-4 text-emerald-600" />
@@ -434,13 +422,13 @@ export default function BookingDetails() {
                   <div>
                     <p className="text-sm font-medium">Confirmed</p>
                     <p className="text-xs text-muted-foreground">
-                      {format(new Date(booking.confirmed_at), "MMM dd, yyyy 'at' h:mm a")}
+                      {format(new Date(booking.updated_at), "MMM dd, yyyy 'at' h:mm a")}
                     </p>
                   </div>
                 </div>
               )}
 
-              {booking.completed_at && (
+              {booking.status === "checked_out" && (
                 <div className="flex items-start gap-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100">
                     <CheckCircle className="h-4 w-4 text-slate-600" />
@@ -448,13 +436,13 @@ export default function BookingDetails() {
                   <div>
                     <p className="text-sm font-medium">Completed</p>
                     <p className="text-xs text-muted-foreground">
-                      {format(new Date(booking.completed_at), "MMM dd, yyyy 'at' h:mm a")}
+                      {format(new Date(booking.updated_at), "MMM dd, yyyy 'at' h:mm a")}
                     </p>
                   </div>
                 </div>
               )}
 
-              {booking.cancelled_at && (
+              {booking.status === "cancelled" && (
                 <div className="flex items-start gap-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
                     <XCircle className="h-4 w-4 text-red-600" />
@@ -462,7 +450,7 @@ export default function BookingDetails() {
                   <div>
                     <p className="text-sm font-medium">Cancelled</p>
                     <p className="text-xs text-muted-foreground">
-                      {format(new Date(booking.cancelled_at), "MMM dd, yyyy 'at' h:mm a")}
+                      {format(new Date(booking.updated_at), "MMM dd, yyyy 'at' h:mm a")}
                     </p>
                   </div>
                 </div>
