@@ -41,8 +41,8 @@ export interface RoomCategory {
   total_rooms: number;
   amenities: string[];
   images: string[];
-  status: RoomStatus;
-  sort_order: number;
+  is_active: boolean;
+  display_order: number;
   created_at: string;
   updated_at: string;
 }
@@ -88,7 +88,7 @@ export interface Package {
   images: string[];
   is_active: boolean;
   is_featured: boolean;
-  sort_order: number;
+  display_order: number;
 }
 
 export interface TaxConfig {

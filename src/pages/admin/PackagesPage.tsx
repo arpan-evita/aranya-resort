@@ -48,7 +48,7 @@ interface PackageData {
   per_night_price: number | null;
   is_active: boolean;
   is_featured: boolean;
-  sort_order: number | null;
+  display_order: number | null;
 }
 
 interface PackageFormData {
@@ -101,7 +101,7 @@ export default function PackagesPage() {
       const { data, error } = await supabase
         .from("packages")
         .select("*")
-        .order("sort_order", { ascending: true });
+        .order("display_order", { ascending: true });
       if (error) throw error;
       return data as PackageData[];
     },

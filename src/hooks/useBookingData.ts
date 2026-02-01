@@ -9,8 +9,8 @@ export function useRoomCategories() {
       const { data, error } = await supabase
         .from('room_categories')
         .select('*')
-        .eq('status', 'active')
-        .order('sort_order');
+        .eq('is_active', true)
+        .order('display_order');
       
       if (error) throw error;
       return (data || []).map(room => ({
@@ -27,8 +27,8 @@ export function useRoomCategories() {
         total_rooms: room.total_rooms,
         amenities: Array.isArray(room.amenities) ? room.amenities.map(String) : [],
         images: Array.isArray(room.images) ? room.images.map(String) : [],
-        status: room.status as RoomStatus,
-        sort_order: room.sort_order ?? 0,
+        is_active: room.is_active,
+        display_order: room.display_order ?? 0,
         created_at: room.created_at,
         updated_at: room.updated_at,
       }));
@@ -91,7 +91,7 @@ export function usePackages() {
         .from('packages')
         .select('*')
         .eq('is_active', true)
-        .order('sort_order');
+        .order('display_order');
       
       if (error) throw error;
       return (data || []).map(pkg => ({
@@ -115,7 +115,7 @@ export function usePackages() {
         images: Array.isArray(pkg.images) ? pkg.images.map(String) : [],
         is_active: pkg.is_active,
         is_featured: pkg.is_featured,
-        sort_order: pkg.sort_order ?? 0,
+        display_order: pkg.display_order ?? 0,
       }));
     },
   });
