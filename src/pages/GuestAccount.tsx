@@ -91,31 +91,31 @@ export default function GuestAccount() {
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
 
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-12 overflow-hidden bg-gradient-to-b from-[hsl(var(--forest-deep))] to-[hsl(var(--forest))]">
+        <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-5" />
+        <div className="relative container max-w-5xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
+            <span className="text-[hsl(var(--gold-light))] uppercase tracking-[0.2em] text-sm font-medium">
+              My Account
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-ivory mt-4">
+              Welcome back{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name.split(" ")[0]}` : ""}
+            </h1>
+            <p className="text-ivory/70 mt-4 max-w-xl mx-auto">
+              Manage your bookings, view your stay history, and update your account settings
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       <main className="flex-1 py-8 sm:py-12">
         <div className="container max-w-5xl mx-auto px-4">
-          {/* Welcome Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-serif text-foreground">
-                  Welcome back{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name.split(" ")[0]}` : ""}
-                </h1>
-                <p className="text-muted-foreground mt-1">
-                  Manage your bookings and account settings
-                </p>
-              </div>
-              <Button variant="outline" onClick={handleSignOut} className="w-fit">
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
-              </Button>
-            </div>
-          </motion.div>
-
           {/* Quick Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
