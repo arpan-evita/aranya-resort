@@ -1,0 +1,155 @@
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import safariImage from "@/assets/safari.jpg";
+import diningImage from "@/assets/dining.jpg";
+import poolImage from "@/assets/pool.jpg";
+import treehouseImage from "@/assets/treehouse-suite.jpg";
+
+const experiences = [
+  {
+    image: safariImage,
+    title: "Jungle Safari",
+    subtitle: "Wildlife Adventures",
+    description: "Embark on thrilling expeditions into Dudhwa National Park. Spot tigers, rhinos, and exotic birds.",
+    link: "/experiences",
+  },
+  {
+    image: diningImage,
+    title: "Candlelight Dining",
+    subtitle: "Romantic Experiences",
+    description: "Indulge in exquisite cuisine under the stars with private chef experiences.",
+    link: "/experiences",
+  },
+  {
+    image: poolImage,
+    title: "Infinity Pool",
+    subtitle: "Relaxation",
+    description: "Unwind at our stunning pool with panoramic views of the enchanting forest.",
+    link: "/amenities",
+  },
+  {
+    image: treehouseImage,
+    title: "Nature Retreat",
+    subtitle: "Wellness & Spa",
+    description: "Rejuvenate with holistic treatments inspired by ancient forest traditions.",
+    link: "/amenities",
+  },
+];
+
+export function ExperiencesSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section ref={ref} className="py-24 md:py-32 lg:py-40 bg-background relative">
+      <div className="luxury-container">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16"
+        >
+          <div className="max-w-2xl">
+            <span className="inline-block px-5 py-2 border border-gold/30 rounded-full text-gold text-[11px] uppercase tracking-[0.25em] mb-6">
+              Unforgettable Moments
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium text-foreground tracking-tight leading-[1.1]">
+              Curated
+              <span className="italic text-forest ml-3">Experiences</span>
+            </h2>
+            <p className="text-muted-foreground mt-6 text-lg leading-relaxed max-w-xl">
+              Every moment at Aranya is crafted to create memories that last a lifetime. 
+              From thrilling safaris to serene spa retreats.
+            </p>
+          </div>
+          <Link 
+            to="/experiences" 
+            className="group flex items-center gap-3 text-forest hover:text-gold transition-colors font-medium self-start lg:self-auto"
+          >
+            <span className="text-sm uppercase tracking-wider">Explore All</span>
+            <div className="w-10 h-10 rounded-full border border-current flex items-center justify-center group-hover:bg-gold group-hover:border-gold group-hover:text-ivory transition-all">
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
+        </motion.div>
+
+        {/* Experience Grid - Asymmetric Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* Large Featured Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-7 group"
+          >
+            <Link to={experiences[0].link} className="block">
+              <div className="relative overflow-hidden rounded-3xl aspect-[4/3] lg:aspect-[16/12]">
+                <img
+                  src={experiences[0].image}
+                  alt={experiences[0].title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-forest-deep/20 to-transparent" />
+                
+                {/* Content Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
+                  <span className="inline-block px-4 py-1.5 bg-gold/20 backdrop-blur-sm rounded-full text-gold-light text-xs uppercase tracking-widest mb-4">
+                    {experiences[0].subtitle}
+                  </span>
+                  <h3 className="font-serif text-3xl lg:text-4xl font-medium text-ivory mb-3 group-hover:text-gold-light transition-colors">
+                    {experiences[0].title}
+                  </h3>
+                  <p className="text-ivory/80 text-base leading-relaxed max-w-md">
+                    {experiences[0].description}
+                  </p>
+                  <div className="flex items-center gap-2 mt-6 text-gold-light text-sm font-medium">
+                    <span>Discover More</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Stacked Cards */}
+          <div className="lg:col-span-5 flex flex-col gap-6 lg:gap-8">
+            {experiences.slice(1).map((experience, index) => (
+              <motion.div
+                key={experience.title}
+                initial={{ opacity: 0, y: 40 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
+                className="group"
+              >
+                <Link to={experience.link} className="flex gap-5 items-center p-4 rounded-2xl hover:bg-cream transition-all duration-300">
+                  <div className="relative overflow-hidden rounded-2xl w-28 h-28 md:w-32 md:h-32 flex-shrink-0">
+                    <img
+                      src={experience.image}
+                      alt={experience.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-gold text-xs uppercase tracking-widest font-medium">
+                      {experience.subtitle}
+                    </span>
+                    <h3 className="font-serif text-xl md:text-2xl font-medium text-foreground mt-1 group-hover:text-forest transition-colors">
+                      {experience.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mt-2 line-clamp-2 leading-relaxed">
+                      {experience.description}
+                    </p>
+                  </div>
+                  <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-gold flex-shrink-0 transition-colors" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
