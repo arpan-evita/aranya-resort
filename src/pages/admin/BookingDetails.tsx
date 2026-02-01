@@ -57,11 +57,14 @@ const mealPlanLabels: Record<string, string> = {
 };
 
 const statusTransitions: Record<BookingStatus, BookingStatus[]> = {
-  new_enquiry: ["pending_confirmation", "cancelled"],
-  pending_confirmation: ["confirmed", "cancelled"],
-  confirmed: ["completed", "cancelled"],
+  new_enquiry: ["enquiry_responded", "quote_sent", "cancelled"],
+  enquiry_responded: ["quote_sent", "booking_confirmed", "cancelled"],
+  quote_sent: ["booking_confirmed", "cancelled"],
+  booking_confirmed: ["checked_in", "cancelled", "no_show"],
+  checked_in: ["checked_out"],
+  checked_out: [],
   cancelled: [],
-  completed: [],
+  no_show: [],
 };
 
 export default function BookingDetails() {

@@ -21,7 +21,7 @@ export function useCreateBooking() {
       // Get current user if logged in
       const { data: { user } } = await supabase.auth.getUser();
 
-      const status: BookingStatus = formData.isEnquiryOnly ? 'new_enquiry' : 'pending_confirmation';
+      const status: BookingStatus = formData.isEnquiryOnly ? 'new_enquiry' : 'quote_sent';
 
       // The trigger will replace this with a proper reference
       const tempReference = generateTempReference();

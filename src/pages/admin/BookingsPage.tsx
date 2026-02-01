@@ -46,10 +46,13 @@ import type { BookingStatus } from "@/types/booking";
 const statusOptions: { value: BookingStatus | "all"; label: string }[] = [
   { value: "all", label: "All Statuses" },
   { value: "new_enquiry", label: "New Enquiry" },
-  { value: "pending_confirmation", label: "Pending" },
-  { value: "confirmed", label: "Confirmed" },
+  { value: "enquiry_responded", label: "Responded" },
+  { value: "quote_sent", label: "Quote Sent" },
+  { value: "booking_confirmed", label: "Confirmed" },
+  { value: "checked_in", label: "Checked In" },
+  { value: "checked_out", label: "Checked Out" },
   { value: "cancelled", label: "Cancelled" },
-  { value: "completed", label: "Completed" },
+  { value: "no_show", label: "No Show" },
 ];
 
 export default function BookingsPage() {

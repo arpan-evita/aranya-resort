@@ -141,11 +141,11 @@ export function useBookings(filters: BookingFilters, page: number = 1, perPage: 
       const updates: Record<string, any> = { status };
 
       // Set timestamp based on status
-      if (status === "confirmed") {
+      if (status === "booking_confirmed") {
         updates.confirmed_at = new Date().toISOString();
       } else if (status === "cancelled") {
         updates.cancelled_at = new Date().toISOString();
-      } else if (status === "completed") {
+      } else if (status === "checked_out") {
         updates.completed_at = new Date().toISOString();
       }
 

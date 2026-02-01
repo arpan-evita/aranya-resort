@@ -46,7 +46,7 @@ export function UpcomingBookings() {
         `)
         .gte("check_in_date", today)
         .lte("check_in_date", sevenDaysLater)
-        .in("status", ["confirmed", "pending_confirmation"])
+        .in("status", ["booking_confirmed", "quote_sent", "checked_in"])
         .order("check_in_date", { ascending: true })
         .limit(8);
 
