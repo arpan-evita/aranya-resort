@@ -58,13 +58,13 @@ export function useDashboardStats() {
           .from("bookings")
           .select("*", { count: "exact", head: true })
           .eq("check_in_date", today)
-          .eq("status", "confirmed"),
+          .eq("status", "booking_confirmed"),
         // Check-outs today
         supabase
           .from("bookings")
           .select("*", { count: "exact", head: true })
           .eq("check_out_date", today)
-          .eq("status", "confirmed"),
+          .eq("status", "booking_confirmed"),
         // Pending enquiries
         supabase
           .from("bookings")
@@ -74,7 +74,7 @@ export function useDashboardStats() {
         supabase
           .from("bookings")
           .select("*", { count: "exact", head: true })
-          .eq("status", "confirmed"),
+          .eq("status", "booking_confirmed"),
         // Cancelled in last 30 days
         supabase
           .from("bookings")
@@ -85,12 +85,12 @@ export function useDashboardStats() {
         supabase
           .from("bookings")
           .select("grand_total")
-          .in("status", ["confirmed", "completed"]),
+          .in("status", ["booking_confirmed", "checked_in", "checked_out"]),
         // Monthly revenue
         supabase
           .from("bookings")
           .select("grand_total")
-          .in("status", ["confirmed", "completed"])
+          .in("status", ["booking_confirmed", "checked_in", "checked_out"])
           .gte("created_at", startOfMonth),
       ]);
 
@@ -133,7 +133,7 @@ export function useDashboardStats() {
         const date = format(new Date(booking.created_at), "yyyy-MM-dd");
         if (grouped[date]) {
           grouped[date].bookings++;
-          if (booking.status === "confirmed" || booking.status === "completed") {
+          if (booking.status === "booking_confirmed" || booking.status === "checked_in" || booking.status === "checked_out") {
             grouped[date].revenue += Number(booking.grand_total);
           }
         }
@@ -153,7 +153,7 @@ export function useDashboardStats() {
       const { data } = await supabase
         .from("bookings")
         .select("room_category_id, room_categories(name)")
-        .in("status", ["confirmed", "completed", "pending_confirmation"]);
+        .in("status", ["booking_confirmed", "checked_in", "checked_out", "quote_sent"]);
 
       const distribution: Record<string, number> = {};
       

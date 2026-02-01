@@ -41,14 +41,14 @@ export function useGuestBookings() {
     const checkIn = new Date(b.check_in_date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return checkIn >= today && b.status !== "cancelled" && b.status !== "completed";
+    return checkIn >= today && b.status !== "cancelled" && b.status !== "checked_out" && b.status !== "no_show";
   });
 
   const pastBookings = bookings.filter((b) => {
     const checkOut = new Date(b.check_out_date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return checkOut < today || b.status === "completed" || b.status === "cancelled";
+    return checkOut < today || b.status === "checked_out" || b.status === "cancelled" || b.status === "no_show";
   });
 
   return {
