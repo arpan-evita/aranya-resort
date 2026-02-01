@@ -26,8 +26,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import type { RoomStatus } from "@/types/booking";
-
 interface RoomCategory {
   id: string;
   name: string;
@@ -40,8 +38,8 @@ interface RoomCategory {
   extra_adult_price: number;
   extra_child_price: number;
   total_rooms: number;
-  status: RoomStatus;
-  sort_order: number | null;
+  is_active: boolean;
+  display_order: number | null;
 }
 
 interface RoomFormData {
@@ -55,7 +53,7 @@ interface RoomFormData {
   extra_adult_price: number;
   extra_child_price: number;
   total_rooms: number;
-  status: RoomStatus;
+  is_active: boolean;
 }
 
 const defaultFormData: RoomFormData = {
@@ -69,7 +67,7 @@ const defaultFormData: RoomFormData = {
   extra_adult_price: 1000,
   extra_child_price: 500,
   total_rooms: 1,
-  status: "active",
+  is_active: true,
 };
 
 export default function RoomsPage() {
@@ -84,7 +82,7 @@ export default function RoomsPage() {
       const { data, error } = await supabase
         .from("room_categories")
         .select("*")
-        .order("sort_order", { ascending: true });
+        .order("display_order", { ascending: true });
       if (error) throw error;
       return data as RoomCategory[];
     },
@@ -118,10 +116,10 @@ export default function RoomsPage() {
   });
 
   const toggleStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: RoomStatus }) => {
+    mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
       const { error } = await supabase
         .from("room_categories")
-        .update({ status })
+        .update({ is_active })
         .eq("id", id);
       if (error) throw error;
     },
@@ -144,7 +142,7 @@ export default function RoomsPage() {
       extra_adult_price: room.extra_adult_price,
       extra_child_price: room.extra_child_price,
       total_rooms: room.total_rooms,
-      status: room.status,
+      is_active: room.is_active,
     });
     setDialogOpen(true);
   };
@@ -299,9 +297,9 @@ export default function RoomsPage() {
                 </div>
                 <div className="flex items-center gap-3 pt-6">
                   <Switch
-                    checked={formData.status === "active"}
+                    checked={formData.is_active}
                     onCheckedChange={(checked) => 
-                      setFormData({ ...formData, status: checked ? "active" : "inactive" })
+                      setFormData({ ...formData, is_active: checked })
                     }
                   />
                   <Label>Active</Label>
@@ -371,8 +369,8 @@ export default function RoomsPage() {
                     </div>
                   </TableCell>
                   <TableCell className="text-center">
-                    <Badge variant={room.status === "active" ? "default" : "secondary"}>
-                      {room.status}
+                    <Badge variant={room.is_active ? "default" : "secondary"}>
+                      {room.is_active ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">
@@ -391,10 +389,10 @@ export default function RoomsPage() {
                         className="h-8 w-8"
                         onClick={() => toggleStatusMutation.mutate({
                           id: room.id,
-                          status: room.status === "active" ? "inactive" : "active"
+                          is_active: !room.is_active
                         })}
                       >
-                        {room.status === "active" ? (
+                        {room.is_active ? (
                           <ToggleRight className="h-4 w-4 text-emerald-600" />
                         ) : (
                           <ToggleLeft className="h-4 w-4 text-muted-foreground" />
