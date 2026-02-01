@@ -51,7 +51,21 @@ export function UpcomingBookings() {
         .limit(8);
 
       if (error) throw error;
-      return data as UpcomingBooking[];
+
+      // Supabase nested selects can come back as an object OR an array depending on
+      // relationship inference; normalize to a single object for UI usage.
+      const normalized = (data ?? []).map((row: any) => {
+        const rc = Array.isArray(row.room_categories)
+          ? row.room_categories[0] ?? null
+          : row.room_categories ?? null;
+
+        return {
+          ...row,
+          room_categories: rc,
+        };
+      });
+
+      return normalized as unknown as UpcomingBooking[];
     },
   });
 

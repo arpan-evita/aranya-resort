@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import type { AppRole } from "@/types/booking";
@@ -12,51 +11,60 @@ export function useAuth() {
   const [userRole, setUserRole] = useState<AppRole | null>(null);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Fetch user role
-          setTimeout(async () => {
-            const { data: roleData } = await supabase
-              .from('user_roles')
-              .select('role')
-              .eq('user_id', session.user.id)
-              .maybeSingle();
-            
-            setUserRole(roleData?.role as AppRole || null);
-          }, 0);
-        } else {
-          setUserRole(null);
-        }
-        
-        setLoading(false);
+    let cancelled = false;
+
+    const fetchRole = async (userId: string) => {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (error) throw error;
+      return (data?.role as AppRole) ?? null;
+    };
+
+    const applySession = async (nextSession: Session | null) => {
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
+
+      if (!nextSession?.user) {
+        setUserRole(null);
+        return;
       }
-    );
+
+      try {
+        const role = await fetchRole(nextSession.user.id);
+        if (!cancelled) setUserRole(role);
+      } catch (err: any) {
+        if (!cancelled) setUserRole(null);
+        // Don't hard-fail auth on role fetch; but surface for debugging.
+        toast({
+          variant: "destructive",
+          title: "Role lookup failed",
+          description: err?.message || "Could not fetch user role.",
+        });
+      }
+    };
+
+    // Set up auth state listener FIRST
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, nextSession) => {
+      setLoading(true);
+      await applySession(nextSession);
+      if (!cancelled) setLoading(false);
+    });
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .maybeSingle()
-          .then(({ data: roleData }) => {
-            setUserRole(roleData?.role as AppRole || null);
-          });
-      }
-      
-      setLoading(false);
+    supabase.auth.getSession().then(async ({ data: { session: existingSession } }) => {
+      setLoading(true);
+      await applySession(existingSession);
+      if (!cancelled) setLoading(false);
     });
 
     return () => {
+      cancelled = true;
       subscription.unsubscribe();
     };
   }, []);
