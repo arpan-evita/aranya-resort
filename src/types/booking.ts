@@ -2,10 +2,13 @@
 
 export type BookingStatus = 
   | 'new_enquiry' 
-  | 'pending_confirmation' 
-  | 'confirmed' 
+  | 'enquiry_responded' 
+  | 'quote_sent' 
+  | 'booking_confirmed' 
+  | 'checked_in' 
+  | 'checked_out' 
   | 'cancelled' 
-  | 'completed';
+  | 'no_show';
 
 export type MealPlan = 'EP' | 'CP' | 'MAP' | 'AP';
 
