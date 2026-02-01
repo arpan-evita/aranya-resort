@@ -82,12 +82,12 @@ export function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-4 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 rounded-full ${
+                  className={`relative px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-medium tracking-wide transition-all duration-300 rounded-full whitespace-nowrap ${
                     isScrolled 
                       ? "text-foreground hover:text-forest hover:bg-forest/5" 
                       : "text-ivory/90 hover:text-ivory hover:bg-ivory/10"
