@@ -28,6 +28,7 @@ import BookingsPage from "./pages/admin/BookingsPage";
 import BookingDetails from "./pages/admin/BookingDetails";
 import RoomsPage from "./pages/admin/RoomsPage";
 import PackagesPage from "./pages/admin/PackagesPage";
+import GalleryPage from "./pages/admin/GalleryPage";
 import PricingPage from "./pages/admin/PricingPage";
 import EnquiriesPage from "./pages/admin/EnquiriesPage";
 import ReportsPage from "./pages/admin/ReportsPage";
@@ -70,6 +71,7 @@ const App = () => (
               <Route path="bookings/:id" element={<BookingDetails />} />
               <Route path="rooms" element={<RoomsPage />} />
               <Route path="packages" element={<PackagesPage />} />
+              <Route path="gallery" element={<GalleryPage />} />
               <Route path="pricing" element={<PricingPage />} />
               <Route path="enquiries" element={<EnquiriesPage />} />
               <Route path="reports" element={<ReportsPage />} />
