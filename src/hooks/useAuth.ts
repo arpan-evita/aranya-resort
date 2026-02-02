@@ -94,8 +94,48 @@ export function useAuth() {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    setLoading(true);
+    let lastError: any = null;
+
+    // Best-effort server revoke, but ALWAYS ensure local session is cleared.
+    try {
+      const { error } = await supabase.auth.signOut({ scope: "global" });
+      if (error) {
+        lastError = error;
+        // Fallback: local-only signout (clears storage) even if revoke fails.
+        await supabase.auth.signOut({ scope: "local" });
+      }
+    } catch (err: any) {
+      lastError = err;
+      try {
+        await supabase.auth.signOut({ scope: "local" });
+      } catch (err2: any) {
+        lastError = err2;
+      }
+    } finally {
+      // Hard-clear any persisted auth tokens (failsafe for stuck sessions).
+      try {
+        Object.keys(localStorage)
+          .filter((k) => k.startsWith("sb-") && k.includes("auth-token"))
+          .forEach((k) => localStorage.removeItem(k));
+      } catch {
+        // ignore
+      }
+
+      setSession(null);
+      setUser(null);
+      setUserRole(null);
+      setLoading(false);
+    }
+
+    if (lastError) {
+      // Surface the issue but don't block sign-out UX.
+      toast({
+        variant: "destructive",
+        title: "Sign out issue",
+        description: lastError?.message || "Signed out locally, but server revoke failed.",
+      });
+    }
   };
 
   const isAdmin = userRole === 'super_admin' || userRole === 'staff';
