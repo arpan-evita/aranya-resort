@@ -24,42 +24,47 @@ export function useAuth() {
       return (data?.role as AppRole) ?? null;
     };
 
-    const applySession = async (nextSession: Session | null) => {
+    // IMPORTANT: Keep onAuthStateChange callback synchronous.
+    // Any Supabase calls (like role lookup) must be deferred.
+    const applySessionSync = (nextSession: Session | null) => {
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
+      // Reset role immediately; it will be re-fetched below.
+      setUserRole(null);
 
-      if (!nextSession?.user) {
-        setUserRole(null);
-        return;
-      }
+      const userId = nextSession?.user?.id;
+      if (!userId) return;
 
-      try {
-        const role = await fetchRole(nextSession.user.id);
-        if (!cancelled) setUserRole(role);
-      } catch (err: any) {
-        if (!cancelled) setUserRole(null);
-        // Don't hard-fail auth on role fetch; but surface for debugging.
-        toast({
-          variant: "destructive",
-          title: "Role lookup failed",
-          description: err?.message || "Could not fetch user role.",
-        });
-      }
+      setTimeout(async () => {
+        if (cancelled) return;
+        try {
+          const role = await fetchRole(userId);
+          if (!cancelled) setUserRole(role);
+        } catch (err: any) {
+          if (!cancelled) setUserRole(null);
+          // Don't hard-fail auth on role fetch; but surface for debugging.
+          toast({
+            variant: "destructive",
+            title: "Role lookup failed",
+            description: err?.message || "Could not fetch user role.",
+          });
+        }
+      }, 0);
     };
 
     // Set up auth state listener FIRST
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, nextSession) => {
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setLoading(true);
-      await applySession(nextSession);
+      applySessionSync(nextSession);
       if (!cancelled) setLoading(false);
     });
 
     // THEN check for existing session
-    supabase.auth.getSession().then(async ({ data: { session: existingSession } }) => {
+    supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
       setLoading(true);
-      await applySession(existingSession);
+      applySessionSync(existingSession);
       if (!cancelled) setLoading(false);
     });
 
