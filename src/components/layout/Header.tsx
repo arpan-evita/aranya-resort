@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone, MessageCircle, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,13 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, signOut, isAdmin } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/", { replace: true });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -154,7 +160,7 @@ export function Header() {
                     )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem 
-                      onClick={() => signOut()}
+                      onClick={handleSignOut}
                       className="text-destructive focus:text-destructive"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
@@ -258,7 +264,7 @@ export function Header() {
                       <span>{isAdmin ? "Admin Dashboard" : "My Account"}</span>
                     </Link>
                     <button
-                      onClick={() => signOut()}
+                      onClick={handleSignOut}
                       className="flex items-center gap-3 text-ivory/70 hover:text-ivory transition-colors"
                     >
                       <LogOut className="w-5 h-5" />
