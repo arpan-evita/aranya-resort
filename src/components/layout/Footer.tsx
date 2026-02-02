@@ -15,6 +15,8 @@ const quickLinks = [
   { name: "Amenities", path: "/amenities" },
   { name: "Packages & Offers", path: "/packages" },
   { name: "Gallery", path: "/gallery" },
+  { name: "About Us", path: "/about" },
+  { name: "Careers", path: "/careers" },
   { name: "Contact Us", path: "/contact" },
 ];
 
@@ -37,10 +39,10 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link to="/" className="inline-block mb-6">
               <span className="font-serif text-3xl font-semibold tracking-tight">
-                Aranya
+                Jungle Heritage
               </span>
               <span className="block font-serif text-sm italic text-gold-light mt-1">
-                Forest Resort & Spa
+                Resort & Spa
               </span>
             </Link>
             <p className="text-ivory/70 text-sm leading-relaxed mb-6">
@@ -162,7 +164,7 @@ export function Footer() {
       <div className="border-t border-ivory/10">
         <div className="luxury-container py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-ivory/50 text-sm">
-            © {new Date().getFullYear()} Aranya Forest Resort. All rights reserved.
+            © {new Date().getFullYear()} Jungle Heritage Resort. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="text-ivory/50 hover:text-gold text-sm transition-colors">

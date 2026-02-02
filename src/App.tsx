@@ -16,6 +16,8 @@ import BookingConfirmation from "./pages/BookingConfirmation";
 import GuestLogin from "./pages/GuestLogin";
 import GuestSignup from "./pages/GuestSignup";
 import GuestAccount from "./pages/GuestAccount";
+import About from "./pages/About";
+import Careers from "./pages/Careers";
 import NotFound from "./pages/NotFound";
 
 // Admin Pages
@@ -50,6 +52,8 @@ const App = () => (
             <Route path="/packages" element={<Packages />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/careers" element={<Careers />} />
             <Route path="/booking" element={<BookingNew />} />
             <Route path="/booking/confirmation" element={<BookingConfirmation />} />
 
