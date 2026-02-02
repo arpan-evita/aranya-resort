@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Rooms from "./pages/Rooms";
 import Experiences from "./pages/Experiences";
@@ -38,43 +39,45 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Index />} />
-          <Route path="/rooms" element={<Rooms />} />
-          <Route path="/experiences" element={<Experiences />} />
-          <Route path="/amenities" element={<Amenities />} />
-          <Route path="/packages" element={<Packages />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/booking" element={<BookingNew />} />
-          <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/rooms" element={<Rooms />} />
+            <Route path="/experiences" element={<Experiences />} />
+            <Route path="/amenities" element={<Amenities />} />
+            <Route path="/packages" element={<Packages />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/booking" element={<BookingNew />} />
+            <Route path="/booking/confirmation" element={<BookingConfirmation />} />
 
-          {/* Guest Auth Routes */}
-          <Route path="/login" element={<GuestLogin />} />
-          <Route path="/signup" element={<GuestSignup />} />
-          <Route path="/account" element={<GuestAccount />} />
+            {/* Guest Auth Routes */}
+            <Route path="/login" element={<GuestLogin />} />
+            <Route path="/signup" element={<GuestSignup />} />
+            <Route path="/account" element={<GuestAccount />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="bookings" element={<BookingsPage />} />
-            <Route path="bookings/:id" element={<BookingDetails />} />
-            <Route path="rooms" element={<RoomsPage />} />
-            <Route path="packages" element={<PackagesPage />} />
-            <Route path="pricing" element={<PricingPage />} />
-            <Route path="enquiries" element={<EnquiriesPage />} />
-            <Route path="reports" element={<ReportsPage />} />
-            <Route path="settings" element={<SettingsPage />} />
-            <Route path="users" element={<UsersPage />} />
-          </Route>
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="bookings" element={<BookingsPage />} />
+              <Route path="bookings/:id" element={<BookingDetails />} />
+              <Route path="rooms" element={<RoomsPage />} />
+              <Route path="packages" element={<PackagesPage />} />
+              <Route path="pricing" element={<PricingPage />} />
+              <Route path="enquiries" element={<EnquiriesPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              <Route path="users" element={<UsersPage />} />
+            </Route>
 
-          {/* Catch-all */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Catch-all */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
