@@ -19,6 +19,7 @@ const navLinks = [
   { name: "Amenities", path: "/amenities" },
   { name: "Packages", path: "/packages" },
   { name: "Gallery", path: "/gallery" },
+  { name: "About Us", path: "/about" },
   { name: "Contact", path: "/contact" },
 ];
 
@@ -67,7 +68,7 @@ export function Header() {
                   isScrolled ? "text-forest-deep" : "text-ivory"
                 }`}
               >
-                Aranya
+                Jungle Heritage
               </span>
               <div className="hidden sm:flex flex-col leading-none">
                 <span
@@ -75,7 +76,7 @@ export function Header() {
                     isScrolled ? "text-gold" : "text-gold-light"
                   }`}
                 >
-                  Forest Resort
+                  Resort & Spa
                 </span>
                 <span
                   className={`text-[8px] md:text-[10px] tracking-[0.15em] transition-colors duration-500 ${
