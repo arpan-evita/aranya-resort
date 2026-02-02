@@ -11,7 +11,8 @@ import {
   Settings,
   Users,
   ChevronLeft,
-  TreePine
+  TreePine,
+  Images
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -43,6 +44,11 @@ const navItems = [
     title: "Packages", 
     href: "/admin/packages", 
     icon: Package 
+  },
+  { 
+    title: "Gallery", 
+    href: "/admin/gallery", 
+    icon: Images 
   },
   { 
     title: "Pricing", 
