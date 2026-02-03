@@ -130,6 +130,7 @@ export type Database = {
       }
       enquiries: {
         Row: {
+          category: string
           created_at: string
           email: string
           id: string
@@ -141,6 +142,7 @@ export type Database = {
           subject: string | null
         }
         Insert: {
+          category?: string
           created_at?: string
           email: string
           id?: string
@@ -152,6 +154,7 @@ export type Database = {
           subject?: string | null
         }
         Update: {
+          category?: string
           created_at?: string
           email?: string
           id?: string
