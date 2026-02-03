@@ -59,7 +59,7 @@ export function Header() {
             : "bg-gradient-to-b from-forest-deep/30 to-transparent py-2"
         }`}
       >
-        <div className="luxury-container">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center justify-between h-20 md:h-24">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
