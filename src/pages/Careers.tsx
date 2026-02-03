@@ -150,6 +150,7 @@ const Careers = () => {
         phone: formData.phone,
         subject: `Career Application: ${formData.position}`,
         message: `Position: ${formData.position}\nExperience: ${formData.experience}\n\nAdditional Message: ${formData.message || "N/A"}`,
+        category: "job_application",
       });
 
       if (error) throw error;
