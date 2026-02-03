@@ -59,33 +59,24 @@ export function Header() {
             : "bg-gradient-to-b from-forest-deep/30 to-transparent py-2"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
           <nav className="flex items-center justify-between h-20 md:h-24">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group shrink-0">
+            <Link to="/" className="flex flex-col group shrink-0">
               <span
-                className={`font-serif text-2xl md:text-3xl font-semibold tracking-tight transition-all duration-500 ${
+                className={`font-serif text-xl md:text-2xl font-semibold tracking-tight transition-all duration-500 ${
                   isScrolled ? "text-forest-deep" : "text-ivory"
                 }`}
               >
                 Jungle Heritage
               </span>
-              <div className="hidden sm:flex flex-col leading-none">
-                <span
-                  className={`font-serif text-[10px] md:text-xs uppercase tracking-[0.2em] transition-colors duration-500 ${
-                    isScrolled ? "text-gold" : "text-gold-light"
-                  }`}
-                >
-                  Resort & Spa
-                </span>
-                <span
-                  className={`text-[8px] md:text-[10px] tracking-[0.15em] transition-colors duration-500 ${
-                    isScrolled ? "text-muted-foreground" : "text-ivory/60"
-                  }`}
-                >
-                  DUDHWA
-                </span>
-              </div>
+              <span
+                className={`font-serif text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-colors duration-500 ${
+                  isScrolled ? "text-gold" : "text-gold-light"
+                }`}
+              >
+                Resort & Spa · Dudhwa
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
