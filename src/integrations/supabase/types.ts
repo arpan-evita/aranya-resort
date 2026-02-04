@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      blocked_dates: {
+        Row: {
+          blocked_date: string
+          booking_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          reason: string
+          room_id: string
+        }
+        Insert: {
+          blocked_date: string
+          booking_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          reason?: string
+          room_id: string
+        }
+        Update: {
+          blocked_date?: string
+          booking_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          reason?: string
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocked_dates_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blocked_dates_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           assigned_room_numbers: string[] | null
@@ -40,6 +88,7 @@ export type Database = {
           payment_reference: string | null
           payment_status: string | null
           room_category_id: string | null
+          room_id: string | null
           source: string | null
           special_requests: string | null
           status: Database["public"]["Enums"]["booking_status"]
@@ -72,6 +121,7 @@ export type Database = {
           payment_reference?: string | null
           payment_status?: string | null
           room_category_id?: string | null
+          room_id?: string | null
           source?: string | null
           special_requests?: string | null
           status?: Database["public"]["Enums"]["booking_status"]
@@ -104,6 +154,7 @@ export type Database = {
           payment_reference?: string | null
           payment_status?: string | null
           room_category_id?: string | null
+          room_id?: string | null
           source?: string | null
           special_requests?: string | null
           status?: Database["public"]["Enums"]["booking_status"]
@@ -124,6 +175,13 @@ export type Database = {
             columns: ["room_category_id"]
             isOneToOne: false
             referencedRelation: "room_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
             referencedColumns: ["id"]
           },
         ]
@@ -305,6 +363,50 @@ export type Database = {
         }
         Relationships: []
       }
+      rooms: {
+        Row: {
+          created_at: string
+          floor: number | null
+          id: string
+          is_active: boolean
+          notes: string | null
+          room_category_id: string
+          room_number: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          floor?: number | null
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          room_category_id: string
+          room_number: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          floor?: number | null
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          room_category_id?: string
+          room_number?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rooms_room_category_id_fkey"
+            columns: ["room_category_id"]
+            isOneToOne: false
+            referencedRelation: "room_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -331,6 +433,39 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      block_dates_for_booking: {
+        Args: {
+          _booking_id: string
+          _check_in: string
+          _check_out: string
+          _room_id: string
+        }
+        Returns: undefined
+      }
+      check_room_availability: {
+        Args: {
+          _check_in: string
+          _check_out: string
+          _exclude_booking_id?: string
+          _room_id: string
+        }
+        Returns: boolean
+      }
+      count_available_rooms: {
+        Args: { _date: string; _room_category_id: string }
+        Returns: number
+      }
+      get_available_rooms: {
+        Args: {
+          _check_in: string
+          _check_out: string
+          _room_category_id: string
+        }
+        Returns: {
+          room_id: string
+          room_number: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { 
   LayoutDashboard, 
   CalendarDays, 
+  CalendarRange,
   BedDouble, 
   Package, 
   DollarSign,
@@ -34,6 +35,11 @@ const navItems = [
     title: "Bookings", 
     href: "/admin/bookings", 
     icon: CalendarDays 
+  },
+  { 
+    title: "Calendar", 
+    href: "/admin/calendar", 
+    icon: CalendarRange 
   },
   { 
     title: "Rooms", 
