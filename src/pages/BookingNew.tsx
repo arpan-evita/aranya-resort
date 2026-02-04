@@ -91,8 +91,8 @@ const BookingPage = () => {
       case 1:
         return formData.checkInDate && formData.checkOutDate && numNights > 0;
       case 2:
-        // Check if room is selected AND (availability not yet checked OR rooms are available)
-        return formData.roomCategoryId && formData.numAdults > 0 && (!availabilityChecked || availableRooms > 0);
+        // Just check if room is selected - AvailabilityIndicator shows warnings separately
+        return formData.roomCategoryId && formData.numAdults > 0;
       case 3:
         return formData.mealPlan;
       case 4:
