@@ -86,19 +86,15 @@ export function Header() {
 
             {/* CTA Buttons */}
             <div className="hidden lg:flex items-center gap-3 shrink-0">
-              <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
-                <MessageCircle className="w-4 h-4" />
-                <span className="hidden xl:inline">WhatsApp</span>
+              <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
+                <MessageCircle className="w-5 h-5" />
               </a>
               
               {/* User Menu / Login */}
               {user ? <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className={`rounded-full ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
-                      <User className="w-4 h-4 mr-2" />
-                      <span className="hidden xl:inline">
-                        {user.user_metadata?.full_name?.split(" ")[0] || "Account"}
-                      </span>
+                    <Button variant="ghost" size="icon" className={`w-10 h-10 rounded-full ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
+                      <User className="w-5 h-5" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
@@ -117,9 +113,8 @@ export function Header() {
                       Sign Out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
-                </DropdownMenu> : <Link to="/login" className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
-                  <User className="w-4 h-4" />
-                  <span className="hidden xl:inline">Login</span>
+                </DropdownMenu> : <Link to="/login" className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
+                  <User className="w-5 h-5" />
                 </Link>}
               
               <Button variant={isScrolled ? "luxuryDark" : "luxury"} size="sm" asChild className="shadow-lg">
