@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useRoomCategories, useMealPlanPrices, useTaxConfig, useSeasonMultiplier, useCheckAvailability } from "@/hooks/useBookingData";
 import { usePriceCalculation } from "@/hooks/usePriceCalculation";
 import { useCreateBooking } from "@/hooks/useCreateBooking";
+import { AvailabilityIndicator } from "@/components/booking/AvailabilityIndicator";
 import type { BookingFormData, MealPlan, BOOKING_STEPS } from "@/types/booking";
 
 const steps = [
@@ -381,10 +382,13 @@ const BookingPage = () => {
                           </div>
                         </div>
 
-                        {formData.roomCategoryId && availableRooms <= 0 && (
-                          <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive">
-                            Sorry, this room is not available for your selected dates.
-                          </div>
+                        {formData.roomCategoryId && (
+                          <AvailabilityIndicator
+                            roomCategoryId={formData.roomCategoryId}
+                            checkIn={formData.checkInDate}
+                            checkOut={formData.checkOutDate}
+                            className="mt-4"
+                          />
                         )}
                       </div>
                     )}

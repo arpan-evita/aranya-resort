@@ -151,15 +151,21 @@ export function useCheckAvailability(
     queryFn: async (): Promise<number> => {
       if (!roomCategoryId || !checkInDate || !checkOutDate) return 0;
       
+      // Use the new get_available_rooms function
       const { data, error } = await supabase
         .rpc('get_available_rooms', {
-          p_room_category_id: roomCategoryId,
-          p_check_in: checkInDate.toISOString().split('T')[0],
-          p_check_out: checkOutDate.toISOString().split('T')[0],
+          _room_category_id: roomCategoryId,
+          _check_in: checkInDate.toISOString().split('T')[0],
+          _check_out: checkOutDate.toISOString().split('T')[0],
         });
       
-      if (error) throw error;
-      return data || 0;
+      if (error) {
+        console.error('Availability check error:', error);
+        return 0;
+      }
+      
+      // Returns an array of available rooms, so return the count
+      return Array.isArray(data) ? data.length : 0;
     },
     enabled: !!roomCategoryId && !!checkInDate && !!checkOutDate,
   });

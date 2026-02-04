@@ -26,6 +26,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import BookingsPage from "./pages/admin/BookingsPage";
 import BookingDetails from "./pages/admin/BookingDetails";
+import CalendarPage from "./pages/admin/CalendarPage";
 import RoomsPage from "./pages/admin/RoomsPage";
 import PackagesPage from "./pages/admin/PackagesPage";
 import GalleryPage from "./pages/admin/GalleryPage";
@@ -69,6 +70,7 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="bookings" element={<BookingsPage />} />
               <Route path="bookings/:id" element={<BookingDetails />} />
+              <Route path="calendar" element={<CalendarPage />} />
               <Route path="rooms" element={<RoomsPage />} />
               <Route path="packages" element={<PackagesPage />} />
               <Route path="gallery" element={<GalleryPage />} />

@@ -26,6 +26,30 @@ export function useCreateBooking() {
       // The trigger will replace this with a proper reference
       const tempReference = generateTempReference();
 
+      // First, find an available room if this is a confirmed booking
+      let assignedRoomId: string | null = null;
+      
+      if (!formData.isEnquiryOnly && formData.roomCategoryId) {
+        // Get available rooms for the selected dates
+        const { data: availableRooms, error: availError } = await supabase.rpc('get_available_rooms', {
+          _room_category_id: formData.roomCategoryId,
+          _check_in: formData.checkInDate!.toISOString().split('T')[0],
+          _check_out: formData.checkOutDate!.toISOString().split('T')[0],
+        });
+
+        if (availError) {
+          console.error('Error checking availability:', availError);
+          throw new Error('Could not check room availability. Please try again.');
+        }
+
+        if (!availableRooms || availableRooms.length === 0) {
+          throw new Error('No rooms available for the selected dates. Please choose different dates.');
+        }
+
+        // Assign the first available room
+        assignedRoomId = availableRooms[0].room_id;
+      }
+
       const { data, error } = await supabase
         .from('bookings')
         .insert({
@@ -34,22 +58,19 @@ export function useCreateBooking() {
           guest_name: formData.guestName.trim(),
           guest_email: formData.guestEmail.trim().toLowerCase(),
           guest_phone: formData.guestPhone.trim(),
-          guest_city: formData.guestCity.trim() || null,
+          guest_country: formData.guestCity.trim() || null,
           special_requests: formData.specialRequests.trim() || null,
           room_category_id: formData.roomCategoryId,
+          room_id: assignedRoomId,
           package_id: formData.packageId || null,
           check_in_date: formData.checkInDate!.toISOString().split('T')[0],
           check_out_date: formData.checkOutDate!.toISOString().split('T')[0],
-          num_nights: priceBreakdown.numNights,
           num_adults: formData.numAdults,
           num_children: formData.numChildren,
-          meal_plan: formData.mealPlan,
-          room_total: priceBreakdown.roomTotal,
-          extra_guest_total: priceBreakdown.extraGuestTotal,
-          meal_plan_total: priceBreakdown.mealPlanTotal,
-          package_total: priceBreakdown.packageTotal,
+          base_price: priceBreakdown.roomTotal,
+          extras: priceBreakdown.mealPlanTotal + priceBreakdown.packageTotal,
           taxes: priceBreakdown.taxes,
-          discount_amount: 0,
+          discount: 0,
           grand_total: priceBreakdown.grandTotal,
           status: status,
           is_enquiry_only: formData.isEnquiryOnly,
@@ -60,24 +81,19 @@ export function useCreateBooking() {
       if (error) throw error;
       if (!data) throw new Error('No data returned from booking insert');
       
-      // If booking is confirmed (not just enquiry), block the dates
-      if (!formData.isEnquiryOnly && data) {
-        const checkIn = new Date(formData.checkInDate!);
-        const checkOut = new Date(formData.checkOutDate!);
-        const blockedDates = [];
-        
-        for (let d = new Date(checkIn); d < checkOut; d.setDate(d.getDate() + 1)) {
-          blockedDates.push({
-            room_category_id: formData.roomCategoryId,
-            blocked_date: d.toISOString().split('T')[0],
-            rooms_blocked: 1,
-            reason: 'Booking',
-            booking_id: data.id,
-          });
-        }
+      // If booking is confirmed (not just enquiry) and we have a room, block the dates
+      if (!formData.isEnquiryOnly && assignedRoomId) {
+        // Use the database function to block dates
+        const { error: blockError } = await supabase.rpc('block_dates_for_booking', {
+          _room_id: assignedRoomId,
+          _booking_id: data.id,
+          _check_in: formData.checkInDate!.toISOString().split('T')[0],
+          _check_out: formData.checkOutDate!.toISOString().split('T')[0],
+        });
 
-        if (blockedDates.length > 0) {
-          await supabase.from('blocked_dates').insert(blockedDates);
+        if (blockError) {
+          console.error('Error blocking dates:', blockError);
+          // Don't throw - booking was created, just log the error
         }
       }
 
