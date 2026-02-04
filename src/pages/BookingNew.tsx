@@ -59,7 +59,7 @@ const BookingPage = () => {
   const { data: mealPlanPrices = [], isLoading: mealsLoading } = useMealPlanPrices();
   const { data: taxConfig = [] } = useTaxConfig();
   const { data: seasonMultiplier = 1 } = useSeasonMultiplier(formData.checkInDate);
-  const { data: availableRooms = 0 } = useCheckAvailability(
+  const { data: availableRooms = 0, isSuccess: availabilityChecked } = useCheckAvailability(
     formData.roomCategoryId,
     formData.checkInDate,
     formData.checkOutDate
@@ -91,7 +91,8 @@ const BookingPage = () => {
       case 1:
         return formData.checkInDate && formData.checkOutDate && numNights > 0;
       case 2:
-        return formData.roomCategoryId && formData.numAdults > 0 && availableRooms > 0;
+        // Check if room is selected AND (availability not yet checked OR rooms are available)
+        return formData.roomCategoryId && formData.numAdults > 0 && (!availabilityChecked || availableRooms > 0);
       case 3:
         return formData.mealPlan;
       case 4:
