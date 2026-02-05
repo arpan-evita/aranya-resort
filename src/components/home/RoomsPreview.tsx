@@ -1,48 +1,34 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Users, Maximize, Sparkles } from "lucide-react";
+import { ArrowRight, Users, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import villaImage from "@/assets/villa-interior.jpg";
-import treehouseImage from "@/assets/treehouse-suite.jpg";
-import poolImage from "@/assets/pool.jpg";
-
-const rooms = [
-  {
-    image: villaImage,
-    name: "Forest Villa",
-    tagline: "Where comfort meets wilderness",
-    size: "1,200 sq ft",
-    occupancy: "2 Adults + 1 Child",
-    highlight: "Private Forest Deck",
-    price: "18,000",
-    originalPrice: "22,000",
-  },
-  {
-    image: treehouseImage,
-    name: "Treehouse Suite",
-    tagline: "An elevated escape among canopy",
-    size: "800 sq ft",
-    occupancy: "2 Adults",
-    highlight: "Stargazing Deck",
-    price: "25,000",
-    originalPrice: "30,000",
-  },
-  {
-    image: poolImage,
-    name: "Pool Villa",
-    tagline: "Ultimate luxury with private pool",
-    size: "1,800 sq ft",
-    occupancy: "2 Adults + 2 Children",
-    highlight: "Private Infinity Pool",
-    price: "45,000",
-    originalPrice: "52,000",
-  },
-];
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRoomCategories } from "@/hooks/useRoomCategories";
+import placeholderImage from "/placeholder.svg";
 
 export function RoomsPreview() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { data: rooms = [], isLoading } = useRoomCategories(3);
+
+  const formatOccupancy = (adults: number, children: number) => {
+    let text = `${adults} Adult${adults > 1 ? "s" : ""}`;
+    if (children > 0) {
+      text += ` + ${children} Child${children > 1 ? "ren" : ""}`;
+    }
+    return text;
+  };
+
+  const getFirstAmenity = (amenities: string[] | null) => {
+    if (!amenities || amenities.length === 0) return "Luxury Accommodation";
+    return amenities[0];
+  };
+
+  const getRoomImage = (images: string[] | null) => {
+    if (!images || images.length === 0) return placeholderImage;
+    return images[0];
+  };
 
   return (
     <section ref={ref} className="py-24 md:py-32 lg:py-40 bg-forest-deep relative overflow-hidden">
@@ -74,9 +60,26 @@ export function RoomsPreview() {
 
         {/* Rooms Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {rooms.map((room, index) => (
+          {isLoading ? (
+            // Loading skeletons
+            Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="rounded-3xl bg-forest/50 overflow-hidden">
+                <Skeleton className="aspect-[4/3] w-full bg-ivory/10" />
+                <div className="p-6 lg:p-8 space-y-4">
+                  <Skeleton className="h-4 w-24 bg-ivory/10" />
+                  <Skeleton className="h-8 w-48 bg-ivory/10" />
+                  <Skeleton className="h-4 w-32 bg-ivory/10" />
+                </div>
+              </div>
+            ))
+          ) : rooms.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-ivory/60">No rooms available at the moment.</p>
+            </div>
+          ) : (
+            rooms.map((room, index) => (
             <motion.div
-              key={room.name}
+              key={room.id}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 + index * 0.15 }}
@@ -86,7 +89,7 @@ export function RoomsPreview() {
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
-                    src={room.image}
+                    src={getRoomImage(room.images)}
                     alt={room.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -95,10 +98,9 @@ export function RoomsPreview() {
                   {/* Price Badge */}
                   <div className="absolute top-5 right-5 bg-ivory/95 backdrop-blur-md rounded-xl px-4 py-3 text-center shadow-luxury">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-muted-foreground text-xs line-through">₹{room.originalPrice}</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="font-serif text-2xl font-semibold text-forest-deep">₹{room.price}</span>
+                      <span className="font-serif text-2xl font-semibold text-forest-deep">
+                        ₹{room.base_price_per_night.toLocaleString("en-IN")}
+                      </span>
                     </div>
                     <span className="text-[10px] text-muted-foreground uppercase tracking-wider">per night</span>
                   </div>
@@ -106,9 +108,11 @@ export function RoomsPreview() {
 
                 {/* Content */}
                 <div className="p-6 lg:p-8">
-                  <span className="text-gold-light text-sm italic font-serif">
-                    {room.tagline}
-                  </span>
+                  {room.description && (
+                    <span className="text-gold-light text-sm italic font-serif line-clamp-1">
+                      {room.description.slice(0, 50)}...
+                    </span>
+                  )}
                   <h3 className="font-serif text-2xl md:text-3xl font-medium text-ivory mt-2 group-hover:text-gold-light transition-colors">
                     {room.name}
                   </h3>
@@ -116,19 +120,15 @@ export function RoomsPreview() {
                   {/* Details */}
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-5 text-ivory/60 text-sm">
                     <span className="flex items-center gap-2">
-                      <Maximize className="w-4 h-4 text-gold" />
-                      {room.size}
-                    </span>
-                    <span className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-gold" />
-                      {room.occupancy}
+                      {formatOccupancy(room.max_adults, room.max_children)}
                     </span>
                   </div>
 
                   {/* Highlight Badge */}
                   <div className="flex items-center gap-2 mt-5 text-gold-light text-sm">
                     <Sparkles className="w-4 h-4" />
-                    <span>{room.highlight}</span>
+                    <span>{getFirstAmenity(room.amenities)}</span>
                   </div>
 
                   {/* Actions */}
@@ -137,7 +137,7 @@ export function RoomsPreview() {
                       <Link to="/booking">Book Now</Link>
                     </Button>
                     <Link 
-                      to="/rooms" 
+                      to={`/rooms/${room.slug}`}
                       className="flex items-center gap-2 text-ivory/60 hover:text-gold text-sm transition-colors"
                     >
                       Details
@@ -147,7 +147,8 @@ export function RoomsPreview() {
                 </div>
               </div>
             </motion.div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* View All Button */}
