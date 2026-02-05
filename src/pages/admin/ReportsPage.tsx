@@ -33,7 +33,7 @@ export default function ReportsPage() {
         .select("created_at, grand_total, status")
         .gte("created_at", dateRange.from.toISOString())
         .lte("created_at", dateRange.to.toISOString())
-        .in("status", ["confirmed", "completed"]);
+        .in("status", ["booking_confirmed", "checked_in", "checked_out"]);
 
       if (error) throw error;
 
@@ -53,7 +53,7 @@ export default function ReportsPage() {
         .select("room_category_id, grand_total, room_categories(name)")
         .gte("created_at", dateRange.from.toISOString())
         .lte("created_at", dateRange.to.toISOString())
-        .in("status", ["confirmed", "completed"]);
+        .in("status", ["booking_confirmed", "checked_in", "checked_out"]);
 
       if (error) throw error;
 
@@ -78,7 +78,7 @@ export default function ReportsPage() {
         .select("package_id, package_total, packages(name)")
         .gte("created_at", dateRange.from.toISOString())
         .lte("created_at", dateRange.to.toISOString())
-        .in("status", ["confirmed", "completed"])
+        .in("status", ["booking_confirmed", "checked_in", "checked_out"])
         .not("package_id", "is", null);
 
       if (error) throw error;
