@@ -13,7 +13,8 @@ import {
   Users,
   ChevronLeft,
   TreePine,
-  Images
+   Images,
+   Compass
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -53,6 +54,11 @@ const navItems = [
     href: "/admin/packages", 
     icon: Package 
   },
+   { 
+     title: "Experiences", 
+     href: "/admin/experiences", 
+     icon: Compass 
+   },
   { 
     title: "Gallery", 
     href: "/admin/gallery", 

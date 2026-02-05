@@ -31,6 +31,8 @@ import CalendarPage from "./pages/admin/CalendarPage";
 import RoomsPage from "./pages/admin/RoomsPage";
 import PackagesPage from "./pages/admin/PackagesPage";
 import GalleryPage from "./pages/admin/GalleryPage";
+ import ExperiencesPage from "./pages/admin/ExperiencesPage";
+ import ExperienceDetail from "./pages/ExperienceDetail";
 import PricingPage from "./pages/admin/PricingPage";
 import EnquiriesPage from "./pages/admin/EnquiriesPage";
 import ReportsPage from "./pages/admin/ReportsPage";
@@ -52,6 +54,7 @@ const App = () => (
             <Route path="/rooms" element={<Rooms />} />
              <Route path="/rooms/:slug" element={<RoomDetail />} />
             <Route path="/experiences" element={<Experiences />} />
+             <Route path="/experiences/:slug" element={<ExperienceDetail />} />
             <Route path="/amenities" element={<Amenities />} />
             <Route path="/packages" element={<Packages />} />
             <Route path="/gallery" element={<Gallery />} />
@@ -75,6 +78,7 @@ const App = () => (
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="rooms" element={<RoomsPage />} />
               <Route path="packages" element={<PackagesPage />} />
+               <Route path="experiences" element={<ExperiencesPage />} />
               <Route path="gallery" element={<GalleryPage />} />
               <Route path="pricing" element={<PricingPage />} />
               <Route path="enquiries" element={<EnquiriesPage />} />
