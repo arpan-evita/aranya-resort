@@ -51,7 +51,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
-        className="grid gap-4 md:grid-cols-2"
+        className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2"
       >
         <RevenueCard 
           title="Total Revenue" 
@@ -70,7 +70,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
-        className="grid gap-6 lg:grid-cols-3"
+        className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-3"
       >
         <div className="lg:col-span-2 space-y-6">
           <BookingTrendChart data={trends} loading={trendsLoading} />

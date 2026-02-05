@@ -158,15 +158,15 @@ export default function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-2xl font-serif font-medium">Reports</h1>
           <p className="text-sm text-muted-foreground mt-1">Analytics and performance insights</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="justify-start">
                 <Calendar className="h-4 w-4 mr-2" />
                 {format(dateRange.from, "MMM dd")} - {format(dateRange.to, "MMM dd, yyyy")}
               </Button>
@@ -184,7 +184,7 @@ export default function ReportsPage() {
               />
             </PopoverContent>
           </Popover>
-          <Button onClick={handleExport}>
+          <Button onClick={handleExport} className="w-full sm:w-auto">
             <Download className="h-4 w-4 mr-2" />
             Export CSV
           </Button>
@@ -192,9 +192,9 @@ export default function ReportsPage() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2">
         <Card className="border-0 shadow-sm bg-gradient-to-br from-[hsl(var(--forest-deep))] to-[hsl(var(--forest))] text-white">
-          <CardContent className="p-6">
+          <CardContent className="p-4 md:p-6">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="h-4 w-4 text-[hsl(var(--gold))]" />
               <span className="text-sm text-white/80">Total Revenue</span>
@@ -202,14 +202,14 @@ export default function ReportsPage() {
             {revenueLoading ? (
               <Skeleton className="h-8 w-32 bg-white/20" />
             ) : (
-              <p className="text-3xl font-bold font-serif text-[hsl(var(--gold))]">
+              <p className="text-2xl md:text-3xl font-bold font-serif text-[hsl(var(--gold))]">
                 ₹{(revenueData?.totalRevenue || 0).toLocaleString("en-IN")}
               </p>
             )}
           </CardContent>
         </Card>
         <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
+          <CardContent className="p-4 md:p-6">
             <div className="flex items-center gap-2 mb-2">
               <BarChart3 className="h-4 w-4 text-[hsl(var(--gold))]" />
               <span className="text-sm text-muted-foreground">Confirmed Bookings</span>
@@ -217,13 +217,13 @@ export default function ReportsPage() {
             {revenueLoading ? (
               <Skeleton className="h-8 w-16" />
             ) : (
-              <p className="text-3xl font-bold font-serif">{revenueData?.bookingCount || 0}</p>
+              <p className="text-2xl md:text-3xl font-bold font-serif">{revenueData?.bookingCount || 0}</p>
             )}
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Room Performance */}
         <Card className="border-0 shadow-sm">
           <CardHeader className="pb-3">
@@ -238,7 +238,8 @@ export default function ReportsPage() {
             ) : roomPerformance?.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">No data for selected period</p>
             ) : (
-              <Table>
+              <div className="overflow-x-auto">
+              <Table className="min-w-[300px]">
                 <TableHeader>
                   <TableRow className="bg-muted/30">
                     <TableHead>Room Type</TableHead>
@@ -256,6 +257,7 @@ export default function ReportsPage() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -274,7 +276,8 @@ export default function ReportsPage() {
             ) : packagePerformance?.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">No packages sold in selected period</p>
             ) : (
-              <Table>
+              <div className="overflow-x-auto">
+              <Table className="min-w-[300px]">
                 <TableHeader>
                   <TableRow className="bg-muted/30">
                     <TableHead>Package</TableHead>
@@ -292,6 +295,7 @@ export default function ReportsPage() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             )}
           </CardContent>
         </Card>

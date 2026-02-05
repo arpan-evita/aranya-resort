@@ -19,6 +19,7 @@ interface AdminHeaderProps {
   onSignOut: () => void;
   onMenuToggle: () => void;
   sidebarCollapsed: boolean;
+  isMobile?: boolean;
   pendingCount?: number;
 }
 
@@ -28,6 +29,7 @@ export function AdminHeader({
   onSignOut, 
   onMenuToggle,
   sidebarCollapsed,
+  isMobile = false,
   pendingCount = 0
 }: AdminHeaderProps) {
   const roleLabel = userRole === 'super_admin' ? 'Owner' : 'Staff';
@@ -36,29 +38,18 @@ export function AdminHeader({
 
   return (
     <header className={cn(
-      "fixed top-0 right-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6 transition-all duration-300",
-      sidebarCollapsed ? "left-16" : "left-64"
+      "fixed top-0 right-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 transition-all duration-300",
+      isMobile ? "left-0" : (sidebarCollapsed ? "left-16" : "left-64")
     )}>
       <div className="flex items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={onMenuToggle}
-          className="h-9 w-9 lg:hidden"
+          className="h-9 w-9"
         >
           <Menu className="h-5 w-5" />
         </Button>
-        
-        {sidebarCollapsed && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onMenuToggle}
-            className="h-9 w-9 hidden lg:flex"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-        )}
 
         <div className="hidden md:block">
           <h2 className="text-sm font-medium text-foreground">Welcome back,</h2>

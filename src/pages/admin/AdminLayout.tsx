@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { useAdminAuth } from "@/hooks/admin/useAdminAuth";
@@ -11,9 +12,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
 export default function AdminLayout() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const isMobile = useIsMobile();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const { user, loading, isAdmin, isSuperAdmin, userRole, signOut } = useAdminAuth();
+
+
+  // Auto-collapse sidebar on mobile
+  const effectiveCollapsed = isMobile ? true : sidebarCollapsed;
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setMobileOpen(!mobileOpen);
+    } else {
+      setSidebarCollapsed(!sidebarCollapsed);
+    }
+  };
 
   // Auto logout after 30 minutes of inactivity for admin
   useAutoLogout({
@@ -69,11 +83,21 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-muted/30">
+      {/* Mobile overlay */}
+      {isMobile && mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <AdminSidebar
-        collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        collapsed={effectiveCollapsed}
+        onToggle={toggleSidebar}
         isSuperAdmin={isSuperAdmin}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
       />
 
       {/* Header */}
@@ -81,8 +105,9 @@ export default function AdminLayout() {
         user={user}
         userRole={userRole}
         onSignOut={signOut}
-        onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-        sidebarCollapsed={sidebarCollapsed}
+        onMenuToggle={toggleSidebar}
+        sidebarCollapsed={effectiveCollapsed}
+        isMobile={isMobile}
         pendingCount={pendingCount}
       />
 
@@ -90,10 +115,10 @@ export default function AdminLayout() {
       <main
         className={cn(
           "pt-16 min-h-screen transition-all duration-300",
-          sidebarCollapsed ? "pl-16" : "pl-64"
+          isMobile ? "pl-0" : (effectiveCollapsed ? "pl-16" : "pl-64")
         )}
       >
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <Outlet />
         </div>
       </main>

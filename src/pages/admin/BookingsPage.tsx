@@ -281,8 +281,8 @@ export default function BookingsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t">
-            <p className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t">
+          <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
               Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of {total} bookings
             </p>
             <div className="flex items-center gap-2">
