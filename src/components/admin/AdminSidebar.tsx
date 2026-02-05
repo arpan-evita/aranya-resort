@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { 
   LayoutDashboard, 
@@ -22,6 +22,8 @@ interface AdminSidebarProps {
   collapsed: boolean;
   onToggle: () => void;
   isSuperAdmin: boolean;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 const navItems = [
@@ -78,8 +80,16 @@ const navItems = [
   },
 ];
 
-export function AdminSidebar({ collapsed, onToggle, isSuperAdmin }: AdminSidebarProps) {
+export function AdminSidebar({ collapsed, onToggle, isSuperAdmin, mobileOpen, onMobileClose }: AdminSidebarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (href: string) => {
+    navigate(href);
+    if (onMobileClose) {
+      onMobileClose();
+    }
+  };
 
   const isActive = (href: string, exact?: boolean) => {
     if (exact) {
@@ -91,9 +101,12 @@ export function AdminSidebar({ collapsed, onToggle, isSuperAdmin }: AdminSidebar
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen border-r border-border/50 transition-all duration-300 ease-in-out",
+        "fixed left-0 top-0 z-40 h-screen border-r border-border/50 transition-all duration-300 ease-in-out transform",
         "bg-[hsl(var(--forest-deep))] text-white",
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64",
+        // Mobile: hidden by default, slide in when mobileOpen
+        "max-md:-translate-x-full",
+        mobileOpen && "max-md:translate-x-0 max-md:w-64"
       )}
     >
       {/* Logo */}
@@ -128,38 +141,37 @@ export function AdminSidebar({ collapsed, onToggle, isSuperAdmin }: AdminSidebar
       <ScrollArea className="h-[calc(100vh-4rem)]">
         <nav className="flex flex-col gap-1 p-3">
           {navItems.map((item) => (
-            <NavLink
+            <button
               key={item.href}
-              to={item.href}
-              end={item.exact}
-              className={({ isActive: routeActive }) => cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                collapsed && "justify-center px-2",
-                (item.exact ? routeActive : isActive(item.href, item.exact))
+              onClick={() => handleNavClick(item.href)}
+              className={cn(
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 w-full text-left",
+                collapsed && !mobileOpen && "justify-center px-2",
+                isActive(item.href, item.exact)
                   ? "bg-[hsl(var(--gold))] text-[hsl(var(--forest-deep))]"
                   : "text-white/70 hover:bg-white/10 hover:text-white"
               )}
             >
               <item.icon className={cn("h-5 w-5 flex-shrink-0")} />
-              {!collapsed && <span>{item.title}</span>}
-            </NavLink>
+              {(!collapsed || mobileOpen) && <span>{item.title}</span>}
+            </button>
           ))}
 
           {/* Super Admin Only - Users */}
           {isSuperAdmin && (
-            <NavLink
-              to="/admin/users"
-              className={({ isActive: routeActive }) => cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 mt-4 pt-4 border-t border-white/10",
-                collapsed && "justify-center px-2 border-t-0 mt-2 pt-2",
-                routeActive
+            <button
+              onClick={() => handleNavClick("/admin/users")}
+              className={cn(
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 mt-4 pt-4 border-t border-white/10 w-full text-left",
+                collapsed && !mobileOpen && "justify-center px-2 border-t-0 mt-2 pt-2",
+                location.pathname === "/admin/users"
                   ? "bg-[hsl(var(--gold))] text-[hsl(var(--forest-deep))]"
                   : "text-white/70 hover:bg-white/10 hover:text-white"
               )}
             >
               <Users className={cn("h-5 w-5 flex-shrink-0")} />
-              {!collapsed && <span>Staff Management</span>}
-            </NavLink>
+              {(!collapsed || mobileOpen) && <span>Staff Management</span>}
+            </button>
           )}
         </nav>
       </ScrollArea>

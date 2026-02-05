@@ -162,8 +162,8 @@ export function BookingCalendarView() {
   return (
     <div className="space-y-6">
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="icon" onClick={() => navigate("prev")}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -173,47 +173,45 @@ export function BookingCalendarView() {
           <Button variant="outline" size="sm" onClick={goToToday}>
             Today
           </Button>
-          <h2 className="text-xl font-serif font-medium ml-4">
+        </div>
+        <h2 className="text-lg md:text-xl font-serif font-medium">
             {viewMode === "day"
               ? format(currentDate, "EEEE, MMMM d, yyyy")
               : viewMode === "week"
               ? `${format(dateRange.start, "MMM d")} - ${format(dateRange.end, "MMM d, yyyy")}`
               : format(currentDate, "MMMM yyyy")}
-          </h2>
-        </div>
+        </h2>
 
-        <div className="flex items-center gap-3">
           {/* View Mode Toggle */}
-          <div className="flex items-center border rounded-lg overflow-hidden">
+          <div className="flex items-center border rounded-lg overflow-hidden w-full sm:w-auto">
             <Button
               variant={viewMode === "month" ? "default" : "ghost"}
               size="sm"
-              className="rounded-none"
+              className="rounded-none flex-1 sm:flex-none"
               onClick={() => setViewMode("month")}
             >
               <LayoutGrid className="h-4 w-4 mr-1" />
-              Month
+              <span className="hidden sm:inline">Month</span>
             </Button>
             <Button
               variant={viewMode === "week" ? "default" : "ghost"}
               size="sm"
-              className="rounded-none border-x"
+              className="rounded-none border-x flex-1 sm:flex-none"
               onClick={() => setViewMode("week")}
             >
               <List className="h-4 w-4 mr-1" />
-              Week
+              <span className="hidden sm:inline">Week</span>
             </Button>
             <Button
               variant={viewMode === "day" ? "default" : "ghost"}
               size="sm"
-              className="rounded-none"
+              className="rounded-none flex-1 sm:flex-none"
               onClick={() => setViewMode("day")}
             >
               <Clock className="h-4 w-4 mr-1" />
-              Day
+              <span className="hidden sm:inline">Day</span>
             </Button>
           </div>
-        </div>
       </div>
 
       {/* Filters */}
@@ -222,7 +220,7 @@ export function BookingCalendarView() {
           value={filters.roomCategoryId}
           onValueChange={(value) => setFilters({ ...filters, roomCategoryId: value })}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="All Rooms" />
           </SelectTrigger>
           <SelectContent>
@@ -239,7 +237,7 @@ export function BookingCalendarView() {
           value={filters.status}
           onValueChange={(value) => setFilters({ ...filters, status: value as BookingStatus | "all" })}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="All Statuses" />
           </SelectTrigger>
           <SelectContent>
@@ -253,12 +251,12 @@ export function BookingCalendarView() {
         </Select>
 
         {/* Status Legend */}
-        <div className="flex flex-wrap items-center gap-2 ml-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
           {Object.entries(STATUS_LABELS).slice(0, 4).map(([status, label]) => (
             <Badge
               key={status}
               variant="outline"
-              className="text-xs"
+              className="text-[10px] sm:text-xs"
             >
               <span className={cn("w-2 h-2 rounded-full mr-1.5", STATUS_COLORS[status])} />
               {label}

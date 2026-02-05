@@ -65,10 +65,10 @@ const statCards = [
 export function DashboardStats({ stats, loading }: DashboardStatsProps) {
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
         {statCards.map((card) => (
           <Card key={card.key} className="border-0 shadow-sm">
-            <CardContent className="p-5">
+            <CardContent className="p-4">
               <Skeleton className="h-4 w-20 mb-3" />
               <Skeleton className="h-8 w-16" />
             </CardContent>
@@ -79,7 +79,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {statCards.map((card) => {
         const value = stats?.[card.key] ?? 0;
         const Icon = card.icon;
@@ -89,16 +89,16 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
             key={card.key} 
             className="border-0 shadow-sm hover:shadow-md transition-shadow duration-200 bg-card"
           >
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wide leading-tight">
                   {card.label}
                 </span>
-                <div className={cn("p-2 rounded-lg", card.bgColor)}>
+                <div className={cn("p-1.5 md:p-2 rounded-lg flex-shrink-0", card.bgColor)}>
                   <Icon className={cn("h-4 w-4", card.color)} />
                 </div>
               </div>
-              <p className="text-2xl font-bold font-serif">{value}</p>
+              <p className="text-xl md:text-2xl font-bold font-serif">{value}</p>
             </CardContent>
           </Card>
         );
