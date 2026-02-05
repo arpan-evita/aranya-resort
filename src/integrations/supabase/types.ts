@@ -225,6 +225,60 @@ export type Database = {
         }
         Relationships: []
       }
+      experiences: {
+        Row: {
+          best_time: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          duration: string | null
+          gallery_images: Json | null
+          highlights: Json | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          long_description: string | null
+          name: string
+          slug: string
+          subtitle: string | null
+          updated_at: string
+        }
+        Insert: {
+          best_time?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration?: string | null
+          gallery_images?: Json | null
+          highlights?: Json | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          long_description?: string | null
+          name: string
+          slug: string
+          subtitle?: string | null
+          updated_at?: string
+        }
+        Update: {
+          best_time?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration?: string | null
+          gallery_images?: Json | null
+          highlights?: Json | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          long_description?: string | null
+          name?: string
+          slug?: string
+          subtitle?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_images: {
         Row: {
           alt_text: string
