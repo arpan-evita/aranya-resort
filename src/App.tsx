@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Rooms from "./pages/Rooms";
+ import RoomDetail from "./pages/RoomDetail";
 import Experiences from "./pages/Experiences";
 import Amenities from "./pages/Amenities";
 import Packages from "./pages/Packages";
@@ -49,6 +50,7 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/rooms" element={<Rooms />} />
+             <Route path="/rooms/:slug" element={<RoomDetail />} />
             <Route path="/experiences" element={<Experiences />} />
             <Route path="/amenities" element={<Amenities />} />
             <Route path="/packages" element={<Packages />} />

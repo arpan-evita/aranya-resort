@@ -145,6 +145,13 @@ const Rooms = () => {
                       <Button variant="luxuryDark" size="lg" asChild>
                         <Link to="/booking">Book Now</Link>
                       </Button>
+                       <Link
+                         to={`/rooms/${room.slug}`}
+                         className="flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors"
+                       >
+                         View Details
+                         <ArrowRight className="w-4 h-4" />
+                       </Link>
                     </div>
                   </div>
                 </motion.div>
