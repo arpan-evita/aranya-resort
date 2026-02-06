@@ -5,6 +5,9 @@ import { Menu, X, Phone, MessageCircle, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import logoImage from "@/assets/logo.png";
+
+const PHONE_NUMBER = "9250225752";
 const navLinks = [{
   name: "Home",
   path: "/"
@@ -68,13 +71,16 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
           <nav className="items-center justify-between h-20 md:h-24 flex flex-row mx-0 mr-[30px] gap-[15px]">
             {/* Logo */}
-            <Link to="/" className="flex flex-col group shrink-0">
-              <span className={`font-serif text-xl md:text-2xl font-semibold tracking-tight transition-all duration-500 ${isScrolled ? "text-forest-deep" : "text-ivory"}`}>
-                Jungle Heritage
-              </span>
-              <span className={`font-serif text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-colors duration-500 ${isScrolled ? "text-gold" : "text-gold-light"}`}>
-                Resort & Spa · Dudhwa
-              </span>
+            <Link to="/" className="flex items-center gap-3 group shrink-0">
+              <img src={logoImage} alt="Jungle Heritage Resort" className="h-14 md:h-16 w-auto" />
+              <div className="flex flex-col">
+                <span className={`font-serif text-lg md:text-xl font-semibold tracking-tight transition-all duration-500 ${isScrolled ? "text-forest-deep" : "text-ivory"}`}>
+                  Jungle Heritage
+                </span>
+                <span className={`font-serif text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-colors duration-500 ${isScrolled ? "text-gold" : "text-gold-light"}`}>
+                  Jagdevpur (Bhira)
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
@@ -86,7 +92,7 @@ export function Header() {
 
             {/* CTA Buttons */}
             <div className="hidden lg:flex items-center gap-3 shrink-0">
-              <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
+              <a href={`https://wa.me/91${PHONE_NUMBER}`} target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isScrolled ? "text-forest hover:text-gold hover:bg-gold/5" : "text-ivory/90 hover:text-gold-light hover:bg-ivory/10"}`}>
                 <MessageCircle className="w-5 h-5" />
               </a>
               
@@ -185,9 +191,9 @@ export function Header() {
                     <User className="w-5 h-5" />
                     <span>Login / Sign Up</span>
                   </Link>}
-                <a href="tel:+919999999999" className="flex items-center gap-3 text-ivory">
+                <a href={`tel:+91${PHONE_NUMBER}`} className="flex items-center gap-3 text-ivory">
                   <Phone className="w-5 h-5" />
-                  <span>+91 99999 99999</span>
+                  <span>+91 {PHONE_NUMBER}</span>
                 </a>
                 <Button variant="luxury" size="lg" asChild className="w-full">
                   <Link to="/booking">Book Your Stay</Link>
