@@ -272,9 +272,7 @@ Where every stay tells a story, and every moment connects you to nature.
           }} className="text-center mb-16">
               
               
-              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-                The passionate individuals who bring the Jungle Heritage experience to life
-              </p>
+              
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
