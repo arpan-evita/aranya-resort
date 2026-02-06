@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoImage from "@/assets/logo.png";
-
 const PHONE_NUMBER = "9250225752";
 const navLinks = [{
   name: "Home",
@@ -74,9 +73,7 @@ export function Header() {
             <Link to="/" className="flex items-center gap-3 group shrink-0">
               <img src={logoImage} alt="Jungle Heritage Resort" className="h-14 md:h-16 w-auto" />
               <div className="flex flex-col">
-                <span className={`font-serif text-lg md:text-xl font-semibold tracking-tight transition-all duration-500 ${isScrolled ? "text-forest-deep" : "text-ivory"}`}>
-                  Jungle Heritage
-                </span>
+                
                 <span className={`font-serif text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-colors duration-500 ${isScrolled ? "text-gold" : "text-gold-light"}`}>
                   Jagdevpur (Bhira)
                 </span>
