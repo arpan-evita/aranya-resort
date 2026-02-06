@@ -112,9 +112,8 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                 <span className="text-ivory/70 text-sm">
-                  Near Dudhwa National Park,<br />
-                  Lakhimpur Kheri, Uttar Pradesh,<br />
-                  India - 262902
+                  Jungle Heritage Resort, Bhira,<br />
+                  Jagdevpur, Uttar Pradesh 262901
                 </span>
               </li>
               <li>
