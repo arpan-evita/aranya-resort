@@ -52,7 +52,7 @@ export function AboutSnippet() {
               {/* Floating Image */}
               <div className="absolute -bottom-10 -right-10 lg:-right-16 w-40 md:w-56 rounded-2xl overflow-hidden shadow-luxury border-4 border-background">
                 <div className="aspect-square">
-                  <img src={safariImage} alt="Safari experience" className="w-full h-full object-cover" />
+                  <img alt="Safari experience" className="w-full h-full object-cover" src="/lovable-uploads/04db6b7f-900e-467e-8f52-0039f279c3d4.jpg" />
                 </div>
               </div>
 
