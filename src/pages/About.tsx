@@ -259,47 +259,7 @@ Where every stay tells a story, and every moment connects you to nature.
         </section>
 
         {/* Team Section */}
-        <section ref={teamRef} className="py-24 md:py-32 bg-background">
-          <div className="luxury-container">
-            <motion.div initial={{
-            opacity: 0,
-            y: 30
-          }} animate={teamInView ? {
-            opacity: 1,
-            y: 0
-          } : {}} transition={{
-            duration: 0.6
-          }} className="text-center mb-16">
-              
-              
-              
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member, index) => <motion.div key={member.name} initial={{
-              opacity: 0,
-              y: 30
-            }} animate={teamInView ? {
-              opacity: 1,
-              y: 0
-            } : {}} transition={{
-              duration: 0.6,
-              delay: index * 0.1
-            }} className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-5 rounded-full bg-gradient-to-br from-forest/20 to-gold/20 flex items-center justify-center">
-                    <Users className="w-12 h-12 text-forest/50" />
-                  </div>
-                  <h3 className="font-serif text-lg font-medium text-foreground">
-                    {member.name}
-                  </h3>
-                  <p className="text-gold text-sm mb-3">{member.role}</p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {member.bio}
-                  </p>
-                </motion.div>)}
-            </div>
-          </div>
-        </section>
+        
       </main>
       <Footer />
     </div>;
