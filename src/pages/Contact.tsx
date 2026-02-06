@@ -175,12 +175,10 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-foreground">Address</h3>
-                      <p className="text-muted-foreground">
-                        Near Dudhwa National Park,
+                                      <p className="text-muted-foreground">
+                        Jungle Heritage Resort, Bhira,
                         <br />
-                        Lakhimpur Kheri, Uttar Pradesh,
-                        <br />
-                        India - 262902
+                        Jagdevpur, Uttar Pradesh 262901
                       </p>
                     </div>
                   </div>
