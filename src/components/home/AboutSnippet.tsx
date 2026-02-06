@@ -45,7 +45,7 @@ export function AboutSnippet() {
               {/* Main Image */}
               <div className="relative rounded-3xl overflow-hidden shadow-luxury">
                 <div className="aspect-[4/5]">
-                  <img src={villaImage} alt="Luxury villa interior at Aranya" className="w-full h-full object-cover" />
+                  <img alt="Luxury villa interior at Aranya" className="w-full h-full object-cover" src="/lovable-uploads/c206c149-b410-4cff-9dba-6379ca7cf7bf.jpg" />
                 </div>
               </div>
 
