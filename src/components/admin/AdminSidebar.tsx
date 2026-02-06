@@ -11,6 +11,7 @@ import {
   BarChart3,
   Settings,
   Users,
+  UserCheck,
   ChevronLeft,
   Images,
   Compass
@@ -73,6 +74,11 @@ const navItems = [
     title: "Enquiries", 
     href: "/admin/enquiries", 
     icon: MessageSquare 
+  },
+  { 
+    title: "Guests", 
+    href: "/admin/guests", 
+    icon: UserCheck 
   },
   { 
     title: "Reports", 
