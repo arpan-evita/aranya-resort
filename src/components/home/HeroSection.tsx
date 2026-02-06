@@ -30,7 +30,7 @@ const slides = [{
   label: "Relaxation Redefined",
   title: "Relaxation",
   titleAccent: "Redefined",
-  description: "Unwind at our infinity pool overlooking the enchanting forest canopy."
+  description: "Lounge at our infinity pool as the sun sets over the forest, embracing serene luxury at Jungle Heritage Resort."
 }];
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
