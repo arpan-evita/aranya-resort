@@ -28,7 +28,7 @@ const slides = [{
 }, {
   image: poolImage,
   label: "Relaxation Redefined",
-  title: "Serenity",
+  title: "Relaxation",
   titleAccent: "Redefined",
   description: "Unwind at our infinity pool overlooking the enchanting forest canopy."
 }];
