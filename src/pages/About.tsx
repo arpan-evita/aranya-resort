@@ -270,9 +270,7 @@ Where every stay tells a story, and every moment connects you to nature.
           } : {}} transition={{
             duration: 0.6
           }} className="text-center mb-16">
-              <span className="inline-block px-5 py-2 border border-gold/30 rounded-full text-gold text-[11px] uppercase tracking-[0.25em] mb-6">
-                Our Leadership
-              </span>
+              
               <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground tracking-tight">
                 Meet the Team
               </h2>
