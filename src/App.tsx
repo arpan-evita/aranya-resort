@@ -38,6 +38,7 @@ import EnquiriesPage from "./pages/admin/EnquiriesPage";
 import ReportsPage from "./pages/admin/ReportsPage";
 import SettingsPage from "./pages/admin/SettingsPage";
 import UsersPage from "./pages/admin/UsersPage";
+import GuestsPage from "./pages/admin/GuestsPage";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +86,7 @@ const App = () => (
               <Route path="reports" element={<ReportsPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="users" element={<UsersPage />} />
+              <Route path="guests" element={<GuestsPage />} />
             </Route>
 
             {/* Catch-all */}
