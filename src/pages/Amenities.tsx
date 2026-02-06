@@ -2,11 +2,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import {
-  Waves,
   Dumbbell,
-  Sparkles,
   UtensilsCrossed,
-  Gamepad2,
   Wifi,
   Car,
   Stethoscope,
@@ -17,34 +14,16 @@ import poolImage from "@/assets/pool.jpg";
 
 const amenities = [
   {
-    icon: Waves,
-    title: "Infinity Pool",
-    description:
-      "Our stunning infinity pool overlooks the forest canopy, offering breathtaking views especially during sunset. Complete with poolside service and comfortable loungers.",
-  },
-  {
     icon: Dumbbell,
     title: "Fitness Center",
     description:
       "A fully-equipped gym with modern equipment, open 24/7 for guests who wish to maintain their fitness routine while on vacation.",
   },
   {
-    icon: Sparkles,
-    title: "Spa & Wellness",
-    description:
-      "Our forest spa offers traditional Ayurvedic treatments and modern wellness therapies. Rejuvenate your body and soul in complete tranquility.",
-  },
-  {
     icon: UtensilsCrossed,
     title: "Restaurant & Bar",
     description:
       "Aranyam, our signature restaurant, serves global cuisine with locally-sourced ingredients. The bar offers premium spirits and forest-inspired cocktails.",
-  },
-  {
-    icon: Gamepad2,
-    title: "Recreation",
-    description:
-      "Indoor games including chess, carrom, table tennis, and a curated library. Outdoor activities include badminton and cycling.",
   },
   {
     icon: Wifi,
