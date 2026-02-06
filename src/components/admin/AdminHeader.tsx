@@ -1,4 +1,4 @@
-import { Bell, LogOut, Menu, User } from "lucide-react";
+import { Bell, LogOut, Menu, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { AppRole } from "@/types/booking";
+import logoImage from "@/assets/logo.png";
+
+const PHONE_NUMBER = "9250225752";
 
 interface AdminHeaderProps {
   user: SupabaseUser | null;
@@ -58,6 +61,15 @@ export function AdminHeader({
       </div>
 
       <div className="flex items-center gap-3">
+        {/* Phone Number */}
+        <a 
+          href={`tel:+91${PHONE_NUMBER}`}
+          className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Phone className="h-4 w-4" />
+          <span>+91 {PHONE_NUMBER}</span>
+        </a>
+
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative h-9 w-9">
           <Bell className="h-5 w-5" />

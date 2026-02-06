@@ -8,6 +8,9 @@ import {
   Twitter,
   MessageCircle
 } from "lucide-react";
+import logoImage from "@/assets/logo.png";
+
+const PHONE_NUMBER = "9250225752";
 
 const quickLinks = [
   { name: "Rooms & Villas", path: "/rooms" },
@@ -37,13 +40,16 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <Link to="/" className="inline-block mb-6">
-              <span className="font-serif text-3xl font-semibold tracking-tight">
-                Jungle Heritage
-              </span>
-              <span className="block font-serif text-sm italic text-gold-light mt-1">
-                Resort & Spa
-              </span>
+            <Link to="/" className="inline-flex items-center gap-3 mb-6">
+              <img src={logoImage} alt="Jungle Heritage Resort" className="h-16 w-auto" />
+              <div className="flex flex-col">
+                <span className="font-serif text-2xl font-semibold tracking-tight">
+                  Jungle Heritage
+                </span>
+                <span className="font-serif text-sm italic text-gold-light">
+                  Jagdevpur (Bhira)
+                </span>
+              </div>
             </Link>
             <p className="text-ivory/70 text-sm leading-relaxed mb-6">
               A sanctuary where luxury meets wilderness. Experience the magic of 
@@ -128,25 +134,25 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="tel:+919999999999"
+                  href={`tel:+91${PHONE_NUMBER}`}
                   className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300"
                 >
                   <Phone className="w-5 h-5 text-gold shrink-0" />
-                  <span className="text-sm">+91 99999 99999</span>
+                  <span className="text-sm">+91 {PHONE_NUMBER}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:reservations@aranyaresort.com"
+                  href="mailto:reservations@jungleheritage.com"
                   className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300"
                 >
                   <Mail className="w-5 h-5 text-gold shrink-0" />
-                  <span className="text-sm">reservations@aranyaresort.com</span>
+                  <span className="text-sm">reservations@jungleheritage.com</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="https://wa.me/919999999999"
+                  href={`https://wa.me/91${PHONE_NUMBER}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300"

@@ -12,12 +12,12 @@ import {
   Settings,
   Users,
   ChevronLeft,
-  TreePine,
-   Images,
-   Compass
+  Images,
+  Compass
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import logoImage from "@/assets/logo.png";
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -121,14 +121,14 @@ export function AdminSidebar({ collapsed, onToggle, isSuperAdmin, mobileOpen, on
         collapsed ? "justify-center" : "justify-between"
       )}>
         <div className={cn("flex items-center gap-3", collapsed && "hidden")}>
-          <TreePine className="h-7 w-7 text-[hsl(var(--gold))]" />
+          <img src={logoImage} alt="Jungle Heritage" className="h-10 w-auto" />
           <div>
-            <h1 className="font-serif text-lg font-medium text-white">Aranya</h1>
+            <h1 className="font-serif text-lg font-medium text-white">Jungle Heritage</h1>
             <p className="text-[10px] uppercase tracking-widest text-white/60">Admin</p>
           </div>
         </div>
         {collapsed && (
-          <TreePine className="h-7 w-7 text-[hsl(var(--gold))]" />
+          <img src={logoImage} alt="Jungle Heritage" className="h-8 w-auto" />
         )}
         <Button
           variant="ghost"
