@@ -1,47 +1,55 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { useReviews } from "@/hooks/useReviews";
 
-const testimonials = [
+// Fallback testimonials when no reviews in database
+const fallbackTestimonials = [
   {
-    name: "Priya & Rahul Sharma",
-    location: "New Delhi",
+    id: "1",
+    reviewer_name: "Priya & Rahul Sharma",
+    reviewer_location: "New Delhi",
     occasion: "Anniversary Getaway",
-    avatar: "PS",
     rating: 5,
-    quote: "An absolutely magical experience. The candlelight dinner by the pool, the early morning safari, and the impeccable service made our anniversary unforgettable. Aranya is a true gem hidden in the wilderness.",
+    review_text: "An absolutely magical experience. The candlelight dinner by the pool, the early morning safari, and the impeccable service made our anniversary unforgettable. Jungle Heritage is a true gem hidden in the wilderness.",
   },
   {
-    name: "The Mehta Family",
-    location: "Mumbai",
+    id: "2",
+    reviewer_name: "The Mehta Family",
+    reviewer_location: "Mumbai",
     occasion: "Family Vacation",
-    avatar: "MF",
     rating: 5,
-    quote: "Our children are still talking about the safari! The resort handled everything perfectly - from kid-friendly activities to fine dining. A perfect balance of adventure and relaxation.",
+    review_text: "Our children are still talking about the safari! The resort handled everything perfectly - from kid-friendly activities to fine dining. A perfect balance of adventure and relaxation.",
   },
   {
-    name: "Aditya Verma",
-    location: "Bangalore",
+    id: "3",
+    reviewer_name: "Aditya Verma",
+    reviewer_location: "Bangalore",
     occasion: "Corporate Retreat",
-    avatar: "AV",
     rating: 5,
-    quote: "We hosted our leadership team retreat here and it exceeded all expectations. The serene environment fostered incredible discussions, and the team bonding activities were excellent.",
-  },
-  {
-    name: "Sarah & James Wilson",
-    location: "London, UK",
-    occasion: "Honeymoon",
-    avatar: "SW",
-    rating: 5,
-    quote: "Having traveled to luxury resorts worldwide, Aranya stands out for its authentic connection with nature. The treehouse suite was the absolute highlight of our honeymoon.",
+    review_text: "We hosted our leadership team retreat here and it exceeded all expectations. The serene environment fostered incredible discussions, and the team bonding activities were excellent.",
   },
 ];
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
 
 export function TestimonialsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  const { data: reviews, isLoading } = useReviews();
+  
+  // Use fetched reviews or fallback
+  const testimonials = reviews && reviews.length > 0 ? reviews : fallbackTestimonials;
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -55,7 +63,14 @@ export function TestimonialsSection() {
     if (!isAutoPlaying) return;
     const interval = setInterval(nextTestimonial, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, testimonials.length]);
+
+  // Reset index if testimonials change
+  useEffect(() => {
+    if (currentIndex >= testimonials.length) {
+      setCurrentIndex(0);
+    }
+  }, [testimonials.length, currentIndex]);
 
   const handleManualNavigation = (direction: 'prev' | 'next') => {
     setIsAutoPlaying(false);
@@ -65,6 +80,8 @@ export function TestimonialsSection() {
   };
 
   const currentTestimonial = testimonials[currentIndex];
+
+  if (!currentTestimonial) return null;
 
   return (
     <section ref={ref} className="py-24 md:py-32 lg:py-40 bg-cream relative overflow-hidden">
@@ -120,20 +137,22 @@ export function TestimonialsSection() {
 
                 {/* Quote */}
                 <blockquote className="font-serif text-xl md:text-2xl lg:text-3xl text-foreground text-center leading-relaxed mb-10 relative z-10">
-                  {currentTestimonial.quote}
+                  {currentTestimonial.review_text}
                 </blockquote>
 
                 {/* Author */}
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-forest flex items-center justify-center text-ivory font-medium text-lg">
-                    {currentTestimonial.avatar}
+                    {getInitials(currentTestimonial.reviewer_name)}
                   </div>
                   <div className="text-center">
                     <p className="font-serif text-lg font-medium text-foreground">
-                      {currentTestimonial.name}
+                      {currentTestimonial.reviewer_name}
                     </p>
                     <p className="text-muted-foreground text-sm mt-1">
-                      {currentTestimonial.location} • {currentTestimonial.occasion}
+                      {[currentTestimonial.reviewer_location, currentTestimonial.occasion]
+                        .filter(Boolean)
+                        .join(" • ")}
                     </p>
                   </div>
                 </div>
