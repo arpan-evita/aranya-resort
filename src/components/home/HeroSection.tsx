@@ -29,7 +29,7 @@ const slides = [{
   image: poolImage,
   label: "Relaxation Redefined",
   title: "Serenity",
-  titleAccent: "Awaits You",
+  titleAccent: "Redefined",
   description: "Unwind at our infinity pool overlooking the enchanting forest canopy."
 }];
 export function HeroSection() {
