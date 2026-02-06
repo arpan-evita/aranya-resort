@@ -1,40 +1,53 @@
 import { Link } from "react-router-dom";
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Instagram, 
-  Facebook, 
-  Twitter,
-  MessageCircle
-} from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, MessageCircle } from "lucide-react";
 import logoImage from "@/assets/logo.png";
-
 const PHONE_NUMBER = "9250225752";
-
-const quickLinks = [
-  { name: "Rooms & Villas", path: "/rooms" },
-  { name: "Experiences", path: "/experiences" },
-  { name: "Amenities", path: "/amenities" },
-  { name: "Packages & Offers", path: "/packages" },
-  { name: "Gallery", path: "/gallery" },
-  { name: "About Us", path: "/about" },
-  { name: "Careers", path: "/careers" },
-  { name: "Contact Us", path: "/contact" },
-];
-
-const experienceLinks = [
-  { name: "Jungle Safari", path: "/experiences" },
-  { name: "Nature Walk", path: "/experiences" },
-  { name: "Bird Watching", path: "/experiences" },
-  { name: "Candlelight Dinner", path: "/experiences" },
-  { name: "Weddings & Events", path: "/weddings" },
-  { name: "Corporate Retreats", path: "/corporate" },
-];
-
+const quickLinks = [{
+  name: "Rooms & Villas",
+  path: "/rooms"
+}, {
+  name: "Experiences",
+  path: "/experiences"
+}, {
+  name: "Amenities",
+  path: "/amenities"
+}, {
+  name: "Packages & Offers",
+  path: "/packages"
+}, {
+  name: "Gallery",
+  path: "/gallery"
+}, {
+  name: "About Us",
+  path: "/about"
+}, {
+  name: "Careers",
+  path: "/careers"
+}, {
+  name: "Contact Us",
+  path: "/contact"
+}];
+const experienceLinks = [{
+  name: "Jungle Safari",
+  path: "/experiences"
+}, {
+  name: "Nature Walk",
+  path: "/experiences"
+}, {
+  name: "Bird Watching",
+  path: "/experiences"
+}, {
+  name: "Candlelight Dinner",
+  path: "/experiences"
+}, {
+  name: "Weddings & Events",
+  path: "/weddings"
+}, {
+  name: "Corporate Retreats",
+  path: "/corporate"
+}];
 export function Footer() {
-  return (
-    <footer className="bg-forest-deep text-ivory">
+  return <footer className="bg-forest-deep text-ivory">
       {/* Main Footer */}
       <div className="luxury-container py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
@@ -56,31 +69,13 @@ export function Footer() {
               untouched forests, exotic wildlife, and unparalleled hospitality.
             </p>
             <div className="flex items-center gap-4">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-ivory/20 flex items-center justify-center hover:bg-gold hover:border-gold transition-all duration-300"
-                aria-label="Instagram"
-              >
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-ivory/20 flex items-center justify-center hover:bg-gold hover:border-gold transition-all duration-300" aria-label="Instagram">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-ivory/20 flex items-center justify-center hover:bg-gold hover:border-gold transition-all duration-300"
-                aria-label="Facebook"
-              >
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-ivory/20 flex items-center justify-center hover:bg-gold hover:border-gold transition-all duration-300" aria-label="Facebook">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-ivory/20 flex items-center justify-center hover:bg-gold hover:border-gold transition-all duration-300"
-                aria-label="Twitter"
-              >
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-ivory/20 flex items-center justify-center hover:bg-gold hover:border-gold transition-all duration-300" aria-label="Twitter">
                 <Twitter className="w-4 h-4" />
               </a>
             </div>
@@ -90,16 +85,11 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg font-medium mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-ivory/70 hover:text-gold transition-colors duration-300 text-sm"
-                  >
+              {quickLinks.map(link => <li key={link.path}>
+                  <Link to={link.path} className="text-ivory/70 hover:text-gold transition-colors duration-300 text-sm">
                     {link.name}
                   </Link>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -107,16 +97,11 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg font-medium mb-6">Experiences</h4>
             <ul className="space-y-3">
-              {experienceLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="text-ivory/70 hover:text-gold transition-colors duration-300 text-sm"
-                  >
+              {experienceLinks.map(link => <li key={link.name}>
+                  <Link to={link.path} className="text-ivory/70 hover:text-gold transition-colors duration-300 text-sm">
                     {link.name}
                   </Link>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -133,30 +118,19 @@ export function Footer() {
                 </span>
               </li>
               <li>
-                <a
-                  href={`tel:+91${PHONE_NUMBER}`}
-                  className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300"
-                >
+                <a href={`tel:+91${PHONE_NUMBER}`} className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300">
                   <Phone className="w-5 h-5 text-gold shrink-0" />
                   <span className="text-sm">+91 {PHONE_NUMBER}</span>
                 </a>
               </li>
               <li>
-                <a
-                  href="mailto:reservations@jungleheritage.com"
-                  className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300"
-                >
+                <a href="mailto:reservations@jungleheritage.com" className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300">
                   <Mail className="w-5 h-5 text-gold shrink-0" />
-                  <span className="text-sm">reservations@jungleheritage.com</span>
+                  <span className="text-sm">reservation@jungleheritage.in</span>
                 </a>
               </li>
               <li>
-                <a
-                  href={`https://wa.me/91${PHONE_NUMBER}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300"
-                >
+                <a href={`https://wa.me/91${PHONE_NUMBER}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-ivory/70 hover:text-gold transition-colors duration-300">
                   <MessageCircle className="w-5 h-5 text-gold shrink-0" />
                   <span className="text-sm">WhatsApp Enquiry</span>
                 </a>
@@ -182,6 +156,5 @@ export function Footer() {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 }
