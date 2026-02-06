@@ -283,13 +283,13 @@ const Contact = () => {
         <section className="h-[400px] bg-muted">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10225.411094556208!2d80.51203286926768!3d28.319211513793192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399f5f41f0c5602b%3A0x81bb5dccf9c7987c!2sJungle%20Heritage%20Resort!5e0!3m2!1sen!2sin!4v1770352619667!5m2!1sen!2sin"
-            width="600"
-            height="450"
-            style="border:0;"
-            allowfullscreen=""
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </section>
       </main>
       <Footer />
