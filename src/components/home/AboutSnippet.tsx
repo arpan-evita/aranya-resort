@@ -89,9 +89,7 @@ export function AboutSnippet() {
             <div className="w-20 h-[1px] bg-gradient-to-r from-gold to-transparent my-8" />
 
             <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-              Nestled in the heart of Dudhwa's pristine wilderness, Aranya Forest Resort 
-              is a testament to the art of refined hospitality. Here, the ancient rhythms 
-              of the forest meet contemporary luxury.
+              Set in the untouched wilderness of Dudhwa, Jungle Heritage Resort offers a rare union of refined comfort and natural serenity. Every space is thoughtfully crafted to immerse you in the rhythms of the forest—while delivering the warmth, care, and sophistication of a world-class retreat.
             </p>
 
             <p className="text-muted-foreground leading-relaxed mb-10">
