@@ -39,6 +39,7 @@ import ReportsPage from "./pages/admin/ReportsPage";
 import SettingsPage from "./pages/admin/SettingsPage";
 import UsersPage from "./pages/admin/UsersPage";
 import GuestsPage from "./pages/admin/GuestsPage";
+import ReviewsPage from "./pages/admin/ReviewsPage";
 
 const queryClient = new QueryClient();
 
@@ -87,6 +88,7 @@ const App = () => (
               <Route path="settings" element={<SettingsPage />} />
               <Route path="users" element={<UsersPage />} />
               <Route path="guests" element={<GuestsPage />} />
+              <Route path="reviews" element={<ReviewsPage />} />
             </Route>
 
             {/* Catch-all */}

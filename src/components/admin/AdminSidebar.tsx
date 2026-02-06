@@ -14,7 +14,8 @@ import {
   UserCheck,
   ChevronLeft,
   Images,
-  Compass
+  Compass,
+  Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -64,6 +65,11 @@ const navItems = [
     title: "Gallery", 
     href: "/admin/gallery", 
     icon: Images 
+  },
+  { 
+    title: "Reviews", 
+    href: "/admin/reviews", 
+    icon: Star 
   },
   { 
     title: "Pricing", 

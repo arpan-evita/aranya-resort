@@ -357,6 +357,48 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean
+          occasion: string | null
+          rating: number
+          review_text: string
+          reviewer_location: string | null
+          reviewer_name: string
+          source: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          occasion?: string | null
+          rating?: number
+          review_text: string
+          reviewer_location?: string | null
+          reviewer_name: string
+          source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          occasion?: string | null
+          rating?: number
+          review_text?: string
+          reviewer_location?: string | null
+          reviewer_name?: string
+          source?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       room_categories: {
         Row: {
           amenities: Json | null
