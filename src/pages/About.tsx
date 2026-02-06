@@ -271,9 +271,7 @@ Where every stay tells a story, and every moment connects you to nature.
             duration: 0.6
           }} className="text-center mb-16">
               
-              <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground tracking-tight">
-                Meet the Team
-              </h2>
+              
               <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
                 The passionate individuals who bring the Jungle Heritage experience to life
               </p>
