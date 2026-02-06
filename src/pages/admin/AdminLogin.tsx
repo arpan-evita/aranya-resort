@@ -147,7 +147,7 @@ export default function AdminLogin() {
                 <TreePine className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-serif">Aranya Admin</CardTitle>
+            <CardTitle className="text-2xl font-serif">Jungle Heritage Admin</CardTitle>
             <CardDescription>
               {showForgotPassword 
                 ? "Enter your email to reset your password"
