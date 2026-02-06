@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
-import { TreePine, Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
+import logoImage from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,9 +126,7 @@ export default function GuestLogin() {
           <Card className="shadow-luxury border-border/50">
             <CardHeader className="text-center pb-2">
               <div className="flex justify-center mb-4">
-                <div className="flex items-center justify-center h-14 w-14 rounded-2xl bg-[hsl(var(--forest-deep))]">
-                  <TreePine className="h-8 w-8 text-[hsl(var(--gold))]" />
-                </div>
+                <img src={logoImage} alt="Jungle Heritage" className="h-16 w-auto" />
               </div>
               <CardTitle className="text-2xl font-serif">Welcome Back</CardTitle>
               <CardDescription>
@@ -250,7 +249,7 @@ export default function GuestLogin() {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground">
-                    New to Aranya?
+                    New to Jungle Heritage?
                   </span>
                 </div>
               </div>
