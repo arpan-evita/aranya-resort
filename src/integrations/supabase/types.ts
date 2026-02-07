@@ -315,6 +315,42 @@ export type Database = {
         }
         Relationships: []
       }
+      meal_plan_prices: {
+        Row: {
+          adult_price: number
+          child_price: number
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          meal_plan: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          adult_price?: number
+          child_price?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          meal_plan: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          adult_price?: number
+          child_price?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          meal_plan?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       packages: {
         Row: {
           created_at: string
@@ -502,6 +538,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      seasons: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          is_active: boolean
+          name: string
+          price_multiplier: number
+          season_type: string
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          is_active?: boolean
+          name: string
+          price_multiplier?: number
+          season_type?: string
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_multiplier?: number
+          season_type?: string
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tax_config: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          percentage: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          percentage?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          percentage?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

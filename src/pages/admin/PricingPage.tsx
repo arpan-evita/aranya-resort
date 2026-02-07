@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { Plus, Edit, Trash2, Calendar, Percent, DollarSign, UtensilsCrossed } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, Percent, UtensilsCrossed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -73,6 +73,7 @@ interface MealPlan {
   id: string;
   meal_plan: string;
   name: string;
+  description: string | null;
   adult_price: number;
   child_price: number;
   is_active: boolean;
@@ -88,8 +89,10 @@ export default function PricingPage() {
   const queryClient = useQueryClient();
   const [seasonDialogOpen, setSeasonDialogOpen] = useState(false);
   const [taxDialogOpen, setTaxDialogOpen] = useState(false);
+  const [mealPlanDialogOpen, setMealPlanDialogOpen] = useState(false);
   const [editingSeason, setEditingSeason] = useState<Season | null>(null);
   const [editingTax, setEditingTax] = useState<TaxConfig | null>(null);
+  const [editingMealPlan, setEditingMealPlan] = useState<MealPlan | null>(null);
 
   // Form states
   const [seasonForm, setSeasonForm] = useState({
@@ -104,6 +107,15 @@ export default function PricingPage() {
   const [taxForm, setTaxForm] = useState({
     name: "",
     percentage: 18,
+    is_active: true,
+  });
+
+  const [mealPlanForm, setMealPlanForm] = useState({
+    meal_plan: "",
+    name: "",
+    description: "",
+    adult_price: 0,
+    child_price: 0,
     is_active: true,
   });
 
@@ -129,7 +141,7 @@ export default function PricingPage() {
   const { data: mealPlans, isLoading: mealPlansLoading } = useQuery({
     queryKey: ["admin", "mealPlans"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("meal_plan_prices").select("*");
+      const { data, error } = await supabase.from("meal_plan_prices").select("*").order("meal_plan");
       if (error) throw error;
       return data as MealPlan[];
     },
@@ -139,9 +151,12 @@ export default function PricingPage() {
   const saveSeasonMutation = useMutation({
     mutationFn: async (data: typeof seasonForm & { id?: string }) => {
       const payload = {
-        ...data,
+        name: data.name,
+        season_type: data.season_type,
         start_date: data.start_date?.toISOString().split("T")[0],
         end_date: data.end_date?.toISOString().split("T")[0],
+        price_multiplier: data.price_multiplier,
+        is_active: data.is_active,
       };
       if (data.id) {
         const { error } = await supabase.from("seasons").update(payload).eq("id", data.id);
@@ -175,11 +190,16 @@ export default function PricingPage() {
   // Tax mutations
   const saveTaxMutation = useMutation({
     mutationFn: async (data: typeof taxForm & { id?: string }) => {
+      const payload = {
+        name: data.name,
+        percentage: data.percentage,
+        is_active: data.is_active,
+      };
       if (data.id) {
-        const { error } = await supabase.from("tax_config").update(data).eq("id", data.id);
+        const { error } = await supabase.from("tax_config").update(payload).eq("id", data.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("tax_config").insert(data);
+        const { error } = await supabase.from("tax_config").insert(payload);
         if (error) throw error;
       }
     },
@@ -193,6 +213,57 @@ export default function PricingPage() {
     onError: (err: any) => toast({ variant: "destructive", title: "Error", description: err.message }),
   });
 
+  const deleteTaxMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("tax_config").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "taxes"] });
+      toast({ title: "Tax deleted" });
+    },
+  });
+
+  // Meal Plan mutations
+  const saveMealPlanMutation = useMutation({
+    mutationFn: async (data: typeof mealPlanForm & { id?: string }) => {
+      const payload = {
+        meal_plan: data.meal_plan.toUpperCase(),
+        name: data.name,
+        description: data.description || null,
+        adult_price: data.adult_price,
+        child_price: data.child_price,
+        is_active: data.is_active,
+      };
+      if (data.id) {
+        const { error } = await supabase.from("meal_plan_prices").update(payload).eq("id", data.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("meal_plan_prices").insert(payload);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "mealPlans"] });
+      setMealPlanDialogOpen(false);
+      setEditingMealPlan(null);
+      resetMealPlanForm();
+      toast({ title: "Meal plan saved" });
+    },
+    onError: (err: any) => toast({ variant: "destructive", title: "Error", description: err.message }),
+  });
+
+  const deleteMealPlanMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("meal_plan_prices").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "mealPlans"] });
+      toast({ title: "Meal plan deleted" });
+    },
+  });
+
   const resetSeasonForm = () => {
     setSeasonForm({
       name: "",
@@ -200,6 +271,17 @@ export default function PricingPage() {
       start_date: undefined,
       end_date: undefined,
       price_multiplier: 1.0,
+      is_active: true,
+    });
+  };
+
+  const resetMealPlanForm = () => {
+    setMealPlanForm({
+      meal_plan: "",
+      name: "",
+      description: "",
+      adult_price: 0,
+      child_price: 0,
       is_active: true,
     });
   };
@@ -225,6 +307,19 @@ export default function PricingPage() {
       is_active: tax.is_active,
     });
     setTaxDialogOpen(true);
+  };
+
+  const handleEditMealPlan = (plan: MealPlan) => {
+    setEditingMealPlan(plan);
+    setMealPlanForm({
+      meal_plan: plan.meal_plan,
+      name: plan.name,
+      description: plan.description || "",
+      adult_price: Number(plan.adult_price),
+      child_price: Number(plan.child_price),
+      is_active: plan.is_active,
+    });
+    setMealPlanDialogOpen(true);
   };
 
   return (
@@ -259,7 +354,7 @@ export default function PricingPage() {
                 <form onSubmit={(e) => { e.preventDefault(); saveSeasonMutation.mutate({ ...seasonForm, id: editingSeason?.id }); }} className="space-y-4 py-4">
                   <div className="space-y-2">
                     <Label>Name</Label>
-                    <Input value={seasonForm.name} onChange={(e) => setSeasonForm({ ...seasonForm, name: e.target.value })} required />
+                    <Input value={seasonForm.name} onChange={(e) => setSeasonForm({ ...seasonForm, name: e.target.value })} placeholder="e.g., Summer Peak" required />
                   </div>
                   <div className="space-y-2">
                     <Label>Type</Label>
@@ -422,6 +517,23 @@ export default function PricingPage() {
                       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEditTax(tax)}>
                         <Edit className="h-4 w-4" />
                       </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Tax</AlertDialogTitle>
+                            <AlertDialogDescription>Are you sure? This cannot be undone.</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => deleteTaxMutation.mutate(tax.id)}>Delete</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 ))}
@@ -433,15 +545,93 @@ export default function PricingPage() {
 
       {/* Meal Plans */}
       <Card className="border-0 shadow-sm">
-        <CardHeader className="pb-3">
+        <CardHeader className="flex flex-row items-center justify-between pb-3">
           <CardTitle className="text-lg font-serif flex items-center gap-2">
             <UtensilsCrossed className="h-5 w-5 text-[hsl(var(--gold))]" />
             Meal Plan Pricing
           </CardTitle>
+          <Dialog open={mealPlanDialogOpen} onOpenChange={(open) => {
+            setMealPlanDialogOpen(open);
+            if (!open) { setEditingMealPlan(null); resetMealPlanForm(); }
+          }}>
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <Plus className="h-4 w-4 mr-1" />
+                Add
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingMealPlan ? "Edit Meal Plan" : "Add Meal Plan"}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); saveMealPlanMutation.mutate({ ...mealPlanForm, id: editingMealPlan?.id }); }} className="space-y-4 py-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Plan Code</Label>
+                    <Input 
+                      value={mealPlanForm.meal_plan} 
+                      onChange={(e) => setMealPlanForm({ ...mealPlanForm, meal_plan: e.target.value.toUpperCase() })} 
+                      placeholder="e.g., EP, CP, MAP, AP" 
+                      maxLength={5}
+                      required 
+                      disabled={!!editingMealPlan}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Plan Name</Label>
+                    <Input 
+                      value={mealPlanForm.name} 
+                      onChange={(e) => setMealPlanForm({ ...mealPlanForm, name: e.target.value })} 
+                      placeholder="e.g., Continental Plan" 
+                      required 
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Description</Label>
+                  <Input 
+                    value={mealPlanForm.description} 
+                    onChange={(e) => setMealPlanForm({ ...mealPlanForm, description: e.target.value })} 
+                    placeholder="e.g., Room with breakfast" 
+                  />
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Adult Price (₹ per night)</Label>
+                    <Input 
+                      type="number" 
+                      min="0" 
+                      value={mealPlanForm.adult_price} 
+                      onChange={(e) => setMealPlanForm({ ...mealPlanForm, adult_price: parseFloat(e.target.value) || 0 })} 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Child Price (₹ per night)</Label>
+                    <Input 
+                      type="number" 
+                      min="0" 
+                      value={mealPlanForm.child_price} 
+                      onChange={(e) => setMealPlanForm({ ...mealPlanForm, child_price: parseFloat(e.target.value) || 0 })} 
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Switch checked={mealPlanForm.is_active} onCheckedChange={(c) => setMealPlanForm({ ...mealPlanForm, is_active: c })} />
+                  <Label>Active</Label>
+                </div>
+                <div className="flex justify-end gap-3 pt-4">
+                  <Button type="button" variant="outline" onClick={() => setMealPlanDialogOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={saveMealPlanMutation.isPending}>Save</Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           {mealPlansLoading ? (
             <Skeleton className="h-32 w-full" />
+          ) : mealPlans?.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">No meal plans configured</p>
           ) : (
             <Table>
               <TableHeader>
@@ -451,6 +641,7 @@ export default function PricingPage() {
                   <TableHead className="text-right">Adult Price</TableHead>
                   <TableHead className="text-right">Child Price</TableHead>
                   <TableHead className="text-center">Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -464,6 +655,30 @@ export default function PricingPage() {
                       <Badge variant={plan.is_active ? "default" : "secondary"}>
                         {plan.is_active ? "Active" : "Inactive"}
                       </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEditMealPlan(plan)}>
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Meal Plan</AlertDialogTitle>
+                              <AlertDialogDescription>Are you sure? This cannot be undone.</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => deleteMealPlanMutation.mutate(plan.id)}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
