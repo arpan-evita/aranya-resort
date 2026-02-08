@@ -51,15 +51,68 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Use service role client to list users
+    // Use service role client to access auth.users
     const adminClient = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false },
     });
 
-    // Get pagination params from URL
+    // Get params from URL
     const url = new URL(req.url);
+    const email = url.searchParams.get("email");
     const page = parseInt(url.searchParams.get("page") || "1");
     const perPage = parseInt(url.searchParams.get("per_page") || "50");
+
+    // If email is provided, lookup specific user
+    if (email) {
+      const { data: usersData, error: listError } = await adminClient.auth.admin.listUsers({
+        page: 1,
+        perPage: 1000, // Search through users
+      });
+
+      if (listError) {
+        console.error("Error listing users:", listError);
+        return new Response(JSON.stringify({ error: listError.message }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Find user by email (case-insensitive)
+      const foundUser = usersData.users.find(
+        (u) => u.email?.toLowerCase() === email.toLowerCase()
+      );
+
+      if (!foundUser) {
+        return new Response(
+          JSON.stringify({ error: "User not found. They must sign up first." }),
+          {
+            status: 404,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Check if user already has a role
+      const { data: existingRole } = await adminClient
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", foundUser.id)
+        .single();
+
+      return new Response(
+        JSON.stringify({
+          user: {
+            id: foundUser.id,
+            email: foundUser.email,
+            created_at: foundUser.created_at,
+            existing_role: existingRole?.role || null,
+          },
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
 
     // List users from auth.users
     const { data: usersData, error: listError } = await adminClient.auth.admin.listUsers({

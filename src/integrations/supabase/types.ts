@@ -186,6 +186,72 @@ export type Database = {
           },
         ]
       }
+      channel_manager_logs: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          payload: Json | null
+          provider: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          payload?: Json | null
+          provider: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          provider?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      channel_manager_settings: {
+        Row: {
+          config: Json
+          created_at: string
+          id: string
+          is_enabled: boolean
+          last_error_message: string | null
+          last_sync_at: string | null
+          last_sync_status: string | null
+          provider: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          last_error_message?: string | null
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          provider: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          last_error_message?: string | null
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          provider?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       enquiries: {
         Row: {
           category: string
@@ -390,6 +456,72 @@ export type Database = {
           price_modifier?: number
           slug?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_settings: {
+        Row: {
+          config: Json
+          created_at: string
+          id: string
+          is_enabled: boolean
+          provider: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          provider: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          provider?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      resort_settings: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string
+          id: string
+          location: string
+          phone: string
+          resort_name: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          location: string
+          phone: string
+          resort_name: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          location?: string
+          phone?: string
+          resort_name?: string
+          updated_at?: string
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -661,6 +793,7 @@ export type Database = {
           room_number: string
         }[]
       }
+      get_season_multiplier: { Args: { p_date: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
