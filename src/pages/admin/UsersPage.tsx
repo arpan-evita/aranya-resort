@@ -69,20 +69,40 @@ export default function UsersPage() {
 
   const addStaffMutation = useMutation({
     mutationFn: async (staffEmail: string) => {
-      // First, check if user exists in auth
-      // Note: We can't directly query auth.users, so we'll add the role entry
-      // The user must have signed up first
+      // First, lookup the user by email using the edge function
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
       
-      // For now, we'll create an invitation-style system
-      // The email is stored and when that user signs up, they get the role
-      
-      // Check if role already exists for this email
-      // Since we can't query by email, we'll just insert and let unique constraint handle it
-      
+      if (!token) {
+        throw new Error("Not authenticated");
+      }
+
+      // Call edge function to find user by email
+      const response = await fetch(
+        `https://imlbvvxyxlknevvlbbpr.supabase.co/functions/v1/list-users?email=${encodeURIComponent(staffEmail)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to lookup user");
+      }
+
+      if (result.user.existing_role) {
+        throw new Error(`User already has the role: ${result.user.existing_role}`);
+      }
+
+      // Now insert the role with the actual user_id
       const { error } = await supabase
         .from("user_roles")
         .insert({
-          user_id: "00000000-0000-0000-0000-000000000000", // Placeholder - will need to be updated when user signs up
+          user_id: result.user.id,
           role: "staff" as AppRole,
         });
 
