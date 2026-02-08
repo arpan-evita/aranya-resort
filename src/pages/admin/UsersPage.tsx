@@ -69,7 +69,7 @@ export default function UsersPage() {
 
   const addStaffMutation = useMutation({
     mutationFn: async (staffEmail: string) => {
-      // First, lookup the user by email using the edge function
+      // Get session for auth token
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData.session?.access_token;
       
@@ -77,21 +77,31 @@ export default function UsersPage() {
         throw new Error("Not authenticated");
       }
 
-      // Call edge function to find user by email
-      const response = await fetch(
-        `https://imlbvvxyxlknevvlbbpr.supabase.co/functions/v1/list-users?email=${encodeURIComponent(staffEmail)}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+      let result;
+      try {
+        const response = await fetch(
+          `https://imlbvvxyxlknevvlbbpr.supabase.co/functions/v1/list-users?email=${encodeURIComponent(staffEmail)}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+          throw new Error(errorData.error || `Failed to lookup user (${response.status})`);
         }
-      );
 
-      const result = await response.json();
+        result = await response.json();
+      } catch (fetchError: any) {
+        console.error("Edge function error:", fetchError);
+        throw new Error(fetchError.message || "Failed to connect to user lookup service");
+      }
 
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to lookup user");
+      if (!result?.user?.id) {
+        throw new Error("User not found. They must sign up first.");
       }
 
       if (result.user.existing_role) {
