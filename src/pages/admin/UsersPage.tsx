@@ -52,6 +52,8 @@ export default function UsersPage() {
   const { user: currentUser, isSuperAdmin } = useAdminAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const { data: userRoles, isLoading } = useQuery({
     queryKey: ["admin", "userRoles"],
@@ -68,7 +70,7 @@ export default function UsersPage() {
   });
 
   const addStaffMutation = useMutation({
-    mutationFn: async (staffEmail: string) => {
+    mutationFn: async ({ staffEmail, staffPassword, staffName }: { staffEmail: string; staffPassword: string; staffName: string }) => {
       // Get session for auth token
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData.session?.access_token;
@@ -77,54 +79,39 @@ export default function UsersPage() {
         throw new Error("Not authenticated");
       }
 
-      let result;
-      try {
-        const response = await fetch(
-          `https://imlbvvxyxlknevvlbbpr.supabase.co/functions/v1/list-users?email=${encodeURIComponent(staffEmail)}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
-          throw new Error(errorData.error || `Failed to lookup user (${response.status})`);
+      const response = await fetch(
+        "https://imlbvvxyxlknevvlbbpr.supabase.co/functions/v1/create-staff-user",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: staffEmail,
+            password: staffPassword,
+            name: staffName,
+          }),
         }
+      );
 
-        result = await response.json();
-      } catch (fetchError: any) {
-        console.error("Edge function error:", fetchError);
-        throw new Error(fetchError.message || "Failed to connect to user lookup service");
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || `Failed to create staff user (${response.status})`);
       }
 
-      if (!result?.user?.id) {
-        throw new Error("User not found. They must sign up first.");
-      }
-
-      if (result.user.existing_role) {
-        throw new Error(`User already has the role: ${result.user.existing_role}`);
-      }
-
-      // Now insert the role with the actual user_id
-      const { error } = await supabase
-        .from("user_roles")
-        .insert({
-          user_id: result.user.id,
-          role: "staff" as AppRole,
-        });
-
-      if (error) throw error;
+      return result;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["admin", "userRoles"] });
       setDialogOpen(false);
       setEmail("");
+      setPassword("");
+      setName("");
       toast({ 
-        title: "Staff role added", 
-        description: "The user has been granted staff access." 
+        title: "Staff user created", 
+        description: data.message || "The staff account has been created successfully." 
       });
     },
     onError: (error: any) => {
@@ -188,18 +175,28 @@ export default function UsersPage() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add Staff Member</DialogTitle>
+              <DialogTitle>Create Staff Account</DialogTitle>
               <DialogDescription>
-                Grant staff access to a user. They must have already created an account.
+                Create a new user account with staff access to the admin panel.
               </DialogDescription>
             </DialogHeader>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                addStaffMutation.mutate(email);
+                addStaffMutation.mutate({ staffEmail: email, staffPassword: password, staffName: name });
               }}
               className="space-y-4 py-4"
             >
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <Input
@@ -210,8 +207,20 @@ export default function UsersPage() {
                   placeholder="staff@example.com"
                   required
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  minLength={6}
+                />
                 <p className="text-xs text-muted-foreground">
-                  The user must sign up first, then you can add them here.
+                  Minimum 6 characters. Share these credentials with the staff member securely.
                 </p>
               </div>
               <div className="flex justify-end gap-3 pt-4">
@@ -220,7 +229,7 @@ export default function UsersPage() {
                 </Button>
                 <Button type="submit" disabled={addStaffMutation.isPending}>
                   {addStaffMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                  Add Staff
+                  Create Staff
                 </Button>
               </div>
             </form>
