@@ -97,6 +97,26 @@ export function useCreateBooking() {
         }
       }
 
+      // Send email notification (fire and forget)
+      supabase.functions.invoke('send-notification-email', {
+        body: {
+          type: 'booking',
+          data: {
+            booking_reference: data.booking_reference,
+            guest_name: data.guest_name,
+            guest_email: data.guest_email,
+            guest_phone: data.guest_phone,
+            check_in_date: data.check_in_date,
+            check_out_date: data.check_out_date,
+            num_adults: data.num_adults,
+            num_children: data.num_children,
+            grand_total: data.grand_total,
+            special_requests: data.special_requests,
+            is_enquiry_only: data.is_enquiry_only,
+          },
+        },
+      }).catch(console.error);
+
       // Map the response to our Booking type
       return {
         id: data.id,
