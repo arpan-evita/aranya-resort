@@ -155,6 +155,11 @@ const Careers = () => {
 
       if (error) throw error;
 
+      // Send email notification (fire and forget)
+      supabase.functions.invoke('send-notification-email', {
+        body: { type: 'career', data: formData },
+      }).catch(console.error);
+
       toast({
         title: "Application Submitted!",
         description: "Thank you for your interest. We'll review your application and get back to you soon.",

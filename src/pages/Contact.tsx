@@ -48,6 +48,12 @@ const Contact = () => {
         category: "contact",
       });
       if (error) throw error;
+
+      // Send email notification (fire and forget)
+      supabase.functions.invoke('send-notification-email', {
+        body: { type: 'contact', data: formData },
+      }).catch(console.error);
+
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours.",
