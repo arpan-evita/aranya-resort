@@ -85,7 +85,7 @@ serve(async (req) => {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Jungle Heritage Resort <onboarding@resend.dev>',
+        from: 'Jungle Heritage Resort <notifications@jungleheritage.in>',
         to: [RECIPIENT_EMAIL],
         subject,
         html: htmlBody,
